@@ -1,0 +1,6 @@
+{
+	"extends": "ckeditor5",
+	"parserOptions": {
+		"ecmaVersion": 2017
+	}
+}
