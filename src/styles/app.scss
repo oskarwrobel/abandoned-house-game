@@ -1,0 +1,60 @@
+body, html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	background: #000;
+}
+
+#container {
+	position: relative;
+	width: 100%;
+	padding-top: 56.25%; /* 16:9 Aspect Ratio */
+}
+
+#inner {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+.game,
+.scene-wrapper {
+	width: 100%;
+	height: 100%;
+}
+
+.storage {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	padding: 0 20px;
+}
+
+.scene {
+	width: 100%;
+	height: 100%;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	background-size: 100% 100%;
+}
+
+.item {
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	background-size: 100% 100%;
+	position: absolute;
+
+	&.dragging {
+		pointer-events: none;
+	}
+}
+
+.hit-map {
+	.clickable {
+		cursor: pointer;
+	}
+}
