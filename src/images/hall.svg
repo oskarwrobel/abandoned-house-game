@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1600px"
+	 height="900px" viewBox="0 0 1600 900" style="enable-background:new 0 0 1600 900;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#F3EEDB;}
+	.st1{fill:#FFFFFF;}
+	.st2{fill:#D4D1CC;}
+	.st3{fill:#FFFBF0;}
+	.st4{fill:none;stroke:#AAA0AB;stroke-miterlimit:10;}
+	.st5{fill:#F27050;}
+	.st6{fill:#AAA0AB;}
+	.st7{fill:none;stroke:#CD4432;stroke-miterlimit:10;}
+	.st8{fill:#F45E40;}
+	.st9{fill:#9C8F9E;}
+	.st10{fill:none;stroke:#BC3026;stroke-miterlimit:10;}
+	.st11{fill:#412F3D;}
+	.st12{fill:none;stroke:#BCB8B3;stroke-miterlimit:10;}
+	.st13{fill:#584A5B;}
+	.st14{fill:#C1C0BE;}
+	.st15{fill:none;stroke:#584A5B;stroke-width:2;stroke-miterlimit:10;}
+</style>
+<g id="Warstwa_1">
+	<polygon class="st0" points="995,81 615,81 0,0 1600,0 	"/>
+	<rect x="615" y="81" class="st1" width="380" height="536"/>
+</g>
+<g id="Warstwa_1_kopia">
+	<polygon class="st2" points="1600,901 995,617 995,81 1600,1 	"/>
+	<polygon class="st3" points="615,617 0,901 0,1 615,81 	"/>
+	<polyline class="st4" points="0,812 615,554 995,554 1600,788 	"/>
+	<g>
+		<polyline class="st5" points="438,698.7 263,779.5 263,202 453,207.5 		"/>
+		<polygon class="st6" points="438,211 468,202 468,683.7 438,679 		"/>
+		<polygon points="468,202 263,202 263,213 438,213 		"/>
+		<polygon class="st7" points="419,432 275,464 275,237 419,237 		"/>
+		<polygon class="st7" points="419,668 275,729 275,490.8 419,451 		"/>
+	</g>
+	<g>
+		<polyline class="st8" points="1168,698.7 1343,779.5 1343,202 1153,207.5 		"/>
+		<polygon class="st9" points="1168,211 1138,202 1138,683.7 1168,698.7 		"/>
+		<polygon points="1138,202 1343,202 1343,213 1168,213 		"/>
+		<polygon class="st10" points="1187,432 1331,464 1331,237 1187,237 		"/>
+		<polygon class="st10" points="1187,668 1331,729 1331,490.8 1187,451 		"/>
+	</g>
+	<polygon class="st11" points="1600,900 1343,779.8 1343,753.5 1168,679 1135.4,682.7 995,617 615,617 472,682.8 438,679 263,753.5 
+		263,779 0,900 	"/>
+</g>
+<g id="Warstwa_5">
+	<g>
+		<g>
+			<line class="st12" x1="789.2" y1="514.1" x2="861.5" y2="514.1"/>
+			<line class="st12" x1="771.5" y1="485.2" x2="867.9" y2="485.2"/>
+			<line class="st12" x1="826.1" y1="457.9" x2="826.1" y2="485.2"/>
+			<line class="st12" x1="806.8" y1="486.8" x2="806.8" y2="514.1"/>
+			<line class="st12" x1="847" y1="485.2" x2="847" y2="512.5"/>
+		</g>
+	</g>
+</g>
+<g id="Warstwa_4">
+	<g>
+		<g>
+			<path class="st13" d="M911.8,99.4C884.9,81.3,846.3,70,803.5,70c-42.9,0-78.4,11.8-105.3,29.9L911.8,99.4z"/>
+			<ellipse class="st14" cx="805.3" cy="100.9" rx="108.1" ry="8.3"/>
+		</g>
+		<path class="st1" d="M819.7,92.7c-4.7,0-9.5-0.1-14.4-0.1c-5.2,0-10.3,0-15.3,0.1c0.4,7.8,6.9,14.1,14.8,14.1
+			C812.8,106.7,819.3,100.5,819.7,92.7z"/>
+		<line class="st15" x1="803.5" y1="70" x2="803.5" y2="0"/>
+	</g>
+</g>
+</svg>
