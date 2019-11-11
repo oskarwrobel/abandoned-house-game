@@ -21,11 +21,19 @@ game.addScene( sceneHall );
 game.addScene( sceneHallWall, { back: sceneHall } );
 game.addScene( sceneRoom, { back: sceneHall } );
 
-const flashlight = new Flashlight( game, {
-	image: appImages.flashlight,
-	width: 19.7,
-	height: 51.7
+const hallPaintLarge = new Item( {
+	image: appImages.hallPaint,
+	width: 440,
+	height: 570,
+	attributes: {
+		class: 'clickable hall-paint',
+	},
+	events: {
+		click: () => hallPaintLarge.element.classList.add( 'rotated' )
+	}
 } );
+
+sceneHall.on( 'exit', () => hallPaintLarge.element.classList.remove( 'rotated' ) );
 
 const key = new Item( {
 	image: appImages.key,
@@ -62,20 +70,6 @@ const hallPaint = new Item( {
 	}
 } );
 
-const hallPaintLarge = new Item( {
-	image: appImages.hallPaint,
-	width: 440,
-	height: 570,
-	attributes: {
-		class: 'clickable hall-paint',
-	},
-	events: {
-		click: () => hallPaintLarge.element.classList.add( 'rotated' )
-	}
-} );
-
-//game.storage.addItem( flashlight );
-
 sceneHall.addArea( doorA, { points: [ [ 82, 660 ], [ 82, 228 ], [ 222, 228 ], [ 222, 599 ] ] } );
 sceneHall.addArea( doorB, { points: [ [ 340, 542 ], [ 340, 226 ], [ 443, 226 ], [ 443, 498 ] ] } );
 sceneHall.addArea( doorC, { points: [ [ 840, 498 ], [ 840, 226 ], [ 942, 226 ], [ 942, 542 ] ] } );
@@ -87,3 +81,10 @@ sceneHallWall.addItem( hallPaintLarge, { left: 420, top: 80 } );
 
 game.showScene( sceneHall );
 innerElement.appendChild( game.element );
+
+//const flashlight = new Flashlight( game, {
+//	image: appImages.flashlight,
+//	width: 19.7,
+//	height: 51.7
+//} );
+//game.storage.addItem( flashlight );
