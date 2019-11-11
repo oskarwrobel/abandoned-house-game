@@ -89,6 +89,7 @@ export default class Scene {
 		if ( takeable ) {
 			const eventRef = () => {
 				if ( !this.game.storage.hasItem( item ) ) {
+					this.game.sounds.play( 'button' );
 					this.removeItem( item );
 					this.game.storage.addItem( item, { droppable } );
 					item.element.removeEventListener( 'click', eventRef );

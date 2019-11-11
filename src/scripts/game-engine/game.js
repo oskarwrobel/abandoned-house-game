@@ -1,8 +1,9 @@
 import Storage from './storage';
+import Sounds from './sounds';
 import Item from './item';
 import { createElement } from '../utils/createelement';
 
-/* global appImages */
+/* global appImages, appSounds */
 
 export default class Game {
 	/**
@@ -15,6 +16,11 @@ export default class Game {
 		 * @type {Number}
 		 */
 		this.ratio = ratio;
+
+		/**
+		 * @type {Sounds}
+		 */
+		this.sounds = new Sounds( appSounds );
 
 		/**
 		 * @readonly
@@ -70,7 +76,10 @@ export default class Game {
 					class: 'clickable'
 				},
 				events: {
-					click: () => this.showScene( back )
+					click: () => {
+						this.sounds.play( 'button' );
+						this.showScene( back );
+					}
 				}
 			} );
 

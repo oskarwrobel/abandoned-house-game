@@ -31,7 +31,10 @@ const hallPaintLarge = new Item( {
 		class: 'clickable hall-paint',
 	},
 	events: {
-		click: () => hallPaintLarge.element.classList.toggle( 'rotated' )
+		click: () => {
+			hallPaintLarge.element.classList.toggle( 'rotated' );
+			game.sounds.play( 'swipe' );
+		}
 	}
 } );
 
@@ -69,7 +72,10 @@ const hallPaint = new Item( {
 		class: 'searchable'
 	},
 	events: {
-		click: () => game.showScene( sceneHallWall )
+		click: () => {
+			game.sounds.play( 'button' );
+			game.showScene( sceneHallWall );
+		}
 	}
 } );
 

@@ -39,7 +39,7 @@ module.exports = ( env = {} ) => {
 					]
 				},
 				{
-					test: /.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
+					test: /.(png|jpg|jpeg|gif|svg|wav|mp3|m4a)$/,
 					use: 'file-loader'
 				},
 				{
