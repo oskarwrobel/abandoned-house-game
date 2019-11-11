@@ -2,7 +2,6 @@ import Game from './game-engine/game';
 import Scene from './game-engine/scene';
 import Item from './game-engine/item';
 
-import Flashlight from './game-items/flashlight';
 import createDoor from './game-areas/createdoor';
 
 import '../styles/app.scss';
@@ -90,10 +89,3 @@ sceneHallWall.addItem( hallPaintLarge, { left: 420, top: 80 } );
 
 game.showScene( sceneHall );
 innerElement.appendChild( game.element );
-
-//const flashlight = new Flashlight( game, {
-//	image: appImages.flashlight,
-//	width: 19.7,
-//	height: 51.7
-//} );
-//game.storage.addItem( flashlight );
