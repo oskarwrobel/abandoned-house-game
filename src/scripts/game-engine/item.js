@@ -32,7 +32,9 @@ export default class Item {
 
 	/**
 	 * @private
-	 * @param {String} image
+	 * @param {Object} data
+	 * @param {String} data.image
+	 * @param {Object} data.attributes
 	 * @returns {HTMLElement}
 	 */
 	_render( { image, attributes } ) {

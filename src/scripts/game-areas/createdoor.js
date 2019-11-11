@@ -1,10 +1,8 @@
 import Area from '../game-engine/area';
 
-export default function createDoor( game, { targetScene, keys = [] } ) {
+export default function createDoor( game, { targetScene, keys = [], isLocked = true } ) {
 	const door = new Area( {
-		data: {
-			isLocked: true
-		},
+		data: { isLocked },
 		events: {
 			click: () => {
 				if ( !door.data.isLocked ) {

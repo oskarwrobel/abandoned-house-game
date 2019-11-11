@@ -15,11 +15,13 @@ const ratio = ( ( innerElement.clientWidth * 100 ) / 1280 ) / 100;
 const game = new Game( { ratio } );
 const sceneHall = new Scene( game, { id: 'hall', image: appImages.sceneHall } );
 const sceneHallWall = new Scene( game, { id: 'paint', image: appImages.sceneHallWall } );
-const sceneRoom = new Scene( game, { id: 'room', image: appImages.sceneRoom } );
+const sceneRoomBasement = new Scene( game, { id: 'room', image: appImages.sceneRoomBasement } );
+const sceneRoomLight = new Scene( game, { id: 'room', image: appImages.sceneRoomLight } );
 
 game.addScene( sceneHall );
 game.addScene( sceneHallWall, { back: sceneHall } );
-game.addScene( sceneRoom, { back: sceneHall } );
+game.addScene( sceneRoomBasement, { back: sceneHall } );
+game.addScene( sceneRoomLight, { back: sceneHall } );
 
 const hallPaintLarge = new Item( {
 	image: appImages.hallPaint,
@@ -29,7 +31,7 @@ const hallPaintLarge = new Item( {
 		class: 'clickable hall-paint',
 	},
 	events: {
-		click: () => hallPaintLarge.element.classList.add( 'rotated' )
+		click: () => hallPaintLarge.element.classList.toggle( 'rotated' )
 	}
 } );
 
@@ -42,12 +44,12 @@ const key = new Item( {
 } );
 
 const doorA = createDoor( game, {
-	targetScene: sceneRoom,
-	keys: [ key ]
+	targetScene: {}
 } );
 
 const doorB = createDoor( game, {
-	targetScene: {}
+	targetScene: sceneRoomBasement,
+	keys: [ key ]
 } );
 
 const doorC = createDoor( game, {
@@ -55,7 +57,8 @@ const doorC = createDoor( game, {
 } );
 
 const doorD = createDoor( game, {
-	targetScene: {}
+	targetScene: sceneRoomLight,
+	isLocked: false
 } );
 
 const hallPaint = new Item( {
