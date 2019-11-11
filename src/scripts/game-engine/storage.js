@@ -77,7 +77,13 @@ export default class Storage {
 	 * @param {Item} item
 	 */
 	_attachDragAndDrop( item ) {
+		let previousLeft;
+
 		const moveItemRef = evt => {
+			if ( !previousLeft ) {
+				previousLeft = item.left;
+			}
+
 			item.top = evt.clientY;
 			item.left = evt.clientX;
 		};
@@ -93,8 +99,10 @@ export default class Storage {
 
 			if ( !hoveredArea || !hoveredArea.drop( item ) ) {
 				item.top = 12 * this.game.ratio;
-				item.left = ( 15 + this._getAvailableLeft() ) * this.game.ratio;
+				item.left = previousLeft;
 			}
+
+			previousLeft = null;
 		};
 
 		item.element.addEventListener( 'click', evt => {

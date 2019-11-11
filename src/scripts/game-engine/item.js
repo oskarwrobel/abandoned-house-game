@@ -22,6 +22,18 @@ export default class Item {
 		 */
 		this.element = this._render( { image, attributes } );
 
+		/**
+		 * @private
+		 * @type {Number}
+		 */
+		this._left = 0;
+
+		/**
+		 * @private
+		 * @type {Number}
+		 */
+		this._top = 0;
+
 		// Set initial size.
 		this.width = this.originWidth;
 		this.height = this.originHeight;
@@ -73,16 +85,26 @@ export default class Item {
 	}
 
 	/**
-	 * @param {Number} value
+	 * @type {Number} value
 	 */
 	set top( value ) {
+		this._top = value;
 		this.element.style.top = value + 'px';
 	}
 
+	get top() {
+		return this._top;
+	}
+
 	/**
-	 * @param {Number} value
+	 * @type {Number} value
 	 */
 	set left( value ) {
+		this._left = value;
 		this.element.style.left = value + 'px';
+	}
+
+	get left() {
+		return this._left;
 	}
 }
