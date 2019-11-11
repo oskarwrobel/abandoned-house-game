@@ -1,13 +1,21 @@
 import { createSvgElement } from '../utils/createelement';
 
 export default class Area {
-	constructor( { data, events } ) {
+	constructor( { data, events, attributes = {} } = {} ) {
 		this.data = data;
 
 		this.events = events;
 
-		this.element = createSvgElement( 'polygon', { fill: 'transparent' } );
+		this.element = this._render( attributes );
 		this._attachEvents( events );
+	}
+
+	_render( attributes ) {
+		if ( !attributes.fill ) {
+			attributes.fill = 'transparent';
+		}
+
+		return createSvgElement( 'polygon', attributes );
 	}
 
 	set points( value ) {
@@ -16,10 +24,11 @@ export default class Area {
 
 	_attachEvents( events = {} ) {
 		for ( const name of Object.keys( events ) ) {
-			if ( name === 'click' ) {
-				this.element.classList.add( 'clickable' );
-				this.element.addEventListener( 'click', events[ name ], false );
+			if ( name === 'dropItem' ) {
+				continue;
 			}
+
+			this.element.addEventListener( name, events[ name ], false );
 		}
 	}
 

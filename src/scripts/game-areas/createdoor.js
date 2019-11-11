@@ -19,6 +19,9 @@ export default function createDoor( game, { targetScene, keys = [] } ) {
 					return true;
 				}
 			}
+		},
+		attributes: {
+			class: 'clickable'
 		}
 	} );
 

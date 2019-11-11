@@ -1,5 +1,8 @@
 import Storage from './storage';
+import Item from './item';
 import { createElement } from '../utils/createelement';
+
+/* global appImages */
 
 export default class Game {
 	/**
@@ -48,19 +51,41 @@ export default class Game {
 
 	/**
 	 * @param {Scene} scene
+	 * @param {Object} options
+	 * @param {Scene} options.back
 	 */
-	addScene( scene ) {
+	addScene( scene, { back } = {} ) {
 		if ( this.scenes.has( scene ) ) {
 			throw new Error( 'Cannot add the same scene twice.' );
 		}
 
 		this.scenes.add( scene );
+
+		if ( back ) {
+			const backButton = new Item( {
+				image: appImages.backButton,
+				width: 130,
+				height: 50,
+				attributes: {
+					class: 'clickable'
+				},
+				events: {
+					click: () => this.showScene( back )
+				}
+			} );
+
+			scene.addItem( backButton, { scale: 1, top: 625, left: 1100 } );
+		}
 	}
 
 	/**
 	 * @param {Scene} scene
 	 */
 	showScene( scene ) {
+		if ( !this.scenes.has( scene ) ) {
+			throw new Error( 'Scene is not defined.' );
+		}
+
 		if ( this.currentScene ) {
 			this._sceneWrapperElement.removeChild( this.currentScene.element );
 		}
