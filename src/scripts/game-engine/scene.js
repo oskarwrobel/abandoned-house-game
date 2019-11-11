@@ -75,7 +75,7 @@ export default class Scene {
 	 * @param {Boolean} [data.takeable=false]
 	 * @param {Boolean} [data.droppable=false]
 	 */
-	addItem( item, { scale, top, left, takeable, droppable } ) {
+	addItem( item, { scale = 1, top, left, takeable, droppable } ) {
 		if ( this.items.has( item ) ) {
 			throw new Error( 'Item already defined' );
 		}

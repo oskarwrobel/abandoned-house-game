@@ -1,7 +1,7 @@
 import { createSvgElement } from '../utils/createelement';
 
 export default class Item {
-	constructor( { width, height, image, data, events } ) {
+	constructor( { width, height, image, data, attributes, events } ) {
 		/**
 		 * @type {Number}
 		 */
@@ -20,7 +20,7 @@ export default class Item {
 		/**
 		 * @type {HTMLElement}
 		 */
-		this.element = this._render( { image } );
+		this.element = this._render( { image, attributes } );
 
 		// Set initial size.
 		this.width = this.originWidth;
@@ -35,8 +35,8 @@ export default class Item {
 	 * @param {String} image
 	 * @returns {HTMLElement}
 	 */
-	_render( { image } ) {
-		const element = createSvgElement( 'svg' );
+	_render( { image, attributes } ) {
+		const element = createSvgElement( 'svg', attributes );
 
 		element.classList.add( 'item' );
 
@@ -51,10 +51,6 @@ export default class Item {
 	 */
 	_attachEvents( events = {} ) {
 		for ( const name of Object.keys( events ) ) {
-			if ( name === 'click' ) {
-				this.element.classList.add( 'clickable' );
-			}
-
 			this.element.addEventListener( 'click', events[ name ], false );
 		}
 	}

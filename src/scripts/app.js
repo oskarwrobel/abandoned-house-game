@@ -1,7 +1,6 @@
 import Game from './game-engine/game';
 import Scene from './game-engine/scene';
 import Item from './game-engine/item';
-import Area from './game-engine/area';
 
 import Flashlight from './game-items/flashlight';
 import createDoor from './game-areas/createdoor';
@@ -15,12 +14,12 @@ const ratio = ( ( innerElement.clientWidth * 100 ) / 1280 ) / 100;
 
 const game = new Game( { ratio } );
 const sceneHall = new Scene( game, { id: 'hall', image: appImages.sceneHall } );
-const scenePaint = new Scene( game, { id: 'paint', image: appImages.sceneHallPaint } );
+const sceneHallWall = new Scene( game, { id: 'paint', image: appImages.sceneHallWall } );
 const sceneRoom = new Scene( game, { id: 'room', image: appImages.sceneRoom } );
 
 game.addScene( sceneHall );
-game.addScene( scenePaint, { back: sceneHall } );
-game.addScene( sceneRoom );
+game.addScene( sceneHallWall, { back: sceneHall } );
+game.addScene( sceneRoom, { back: sceneHall } );
 
 const flashlight = new Flashlight( game, {
 	image: appImages.flashlight,
@@ -51,24 +50,40 @@ const doorD = createDoor( game, {
 	targetScene: {}
 } );
 
-const paint = new Area( {
+const hallPaint = new Item( {
+	image: appImages.hallPaint,
+	width: 440,
+	height: 570,
 	attributes: {
 		class: 'searchable'
 	},
 	events: {
-		click: () => game.showScene( scenePaint )
+		click: () => game.showScene( sceneHallWall )
 	}
 } );
 
-//sceneHall.addItem( key, { scale: 1, top: 220, left: 650, takeable: true, droppable: true } );
+const hallPaintLarge = new Item( {
+	image: appImages.hallPaint,
+	width: 440,
+	height: 570,
+	attributes: {
+		class: 'clickable hall-paint',
+	},
+	events: {
+		click: () => hallPaintLarge.element.classList.add( 'rotated' )
+	}
+} );
+
 //game.storage.addItem( flashlight );
 
 sceneHall.addArea( doorA, { points: [ [ 82, 660 ], [ 82, 228 ], [ 222, 228 ], [ 222, 599 ] ] } );
 sceneHall.addArea( doorB, { points: [ [ 340, 542 ], [ 340, 226 ], [ 443, 226 ], [ 443, 498 ] ] } );
 sceneHall.addArea( doorC, { points: [ [ 840, 498 ], [ 840, 226 ], [ 942, 226 ], [ 942, 542 ] ] } );
 sceneHall.addArea( doorD, { points: [ [ 1060, 599 ], [ 1060, 228 ], [ 1200, 228 ], [ 1200, 660 ] ] } );
+sceneHall.addItem( hallPaint, { scale: .28, top: 160, left: 582 } );
 
-sceneHall.addArea( paint, { points: [ [ 570, 327 ], [ 570, 180 ], [ 713, 180 ], [ 713, 327 ] ] } );
+sceneHallWall.addItem( key, { scale: 2.5, top: 440, left: 730, takeable: true, droppable: true } );
+sceneHallWall.addItem( hallPaintLarge, { left: 420, top: 80 } );
 
 game.showScene( sceneHall );
 innerElement.appendChild( game.element );
