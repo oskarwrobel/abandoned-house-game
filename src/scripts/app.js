@@ -35,6 +35,8 @@ const leftDoor = new Area( {
 			if ( item === key ) {
 				leftDoor.data.isLocked = false;
 				game.element.removeChild( item.element );
+
+				return true;
 			}
 		}
 	}

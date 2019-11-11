@@ -69,9 +69,7 @@ export default class Storage {
 
 			const hoveredArea = this.game.currentScene.hitMap.hoveredArea;
 
-			if ( hoveredArea ) {
-				hoveredArea.handleDrop( item );
-			} else {
+			if ( !hoveredArea || !hoveredArea.handleDrop( item ) ) {
 				item.top = 12 * this.game.ratio;
 				item.left = 15 * this.game.ratio;
 			}
