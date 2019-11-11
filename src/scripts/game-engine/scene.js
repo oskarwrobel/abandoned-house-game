@@ -36,12 +36,6 @@ export default class Scene {
 		 */
 		this.hitMap = new HitMap( { ratio: this.game.ratio } );
 		this.element.appendChild( this.hitMap.element );
-
-		/**
-		 * @private
-		 * @type {Object}
-		 */
-		this._refs = {};
 	}
 
 	/**
