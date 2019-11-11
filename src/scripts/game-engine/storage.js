@@ -77,36 +77,32 @@ export default class Storage {
 	 * @param {Item} item
 	 */
 	_attachDragAndDrop( item ) {
-		let isDragging = false;
-
-		item.element.addEventListener( 'mousedown', () => {
-			isDragging = true;
-			item.element.classList.add( 'dragging' );
-		} );
-
-		document.addEventListener( 'mousemove', evt => {
-			if ( !isDragging ) {
-				return;
-			}
-
+		const moveItemRef = evt => {
 			item.top = evt.clientY;
 			item.left = evt.clientX;
-		} );
+		};
 
-		document.addEventListener( 'mouseup', () => {
-			if ( !isDragging ) {
-				return;
-			}
-
-			item.element.classList.remove( 'dragging' );
-			isDragging = false;
+		const dropItemRef = evt => {
+			evt.stopPropagation();
 
 			const hoveredArea = this.game.currentScene.hitMap.hoveredArea;
+
+			item.element.classList.remove( 'dragging' );
+			document.removeEventListener( 'mousemove', moveItemRef );
+			document.removeEventListener( 'click', dropItemRef );
 
 			if ( !hoveredArea || !hoveredArea.drop( item ) ) {
 				item.top = 12 * this.game.ratio;
 				item.left = ( 15 + this._getAvailableLeft() ) * this.game.ratio;
 			}
+		};
+
+		item.element.addEventListener( 'click', evt => {
+			evt.stopPropagation();
+
+			item.element.classList.add( 'dragging' );
+			document.addEventListener( 'mousemove', moveItemRef );
+			document.addEventListener( 'click', dropItemRef );
 		} );
 	}
 }
