@@ -1,5 +1,8 @@
 import HitMap from './hitmap';
 
+import mix from '../utils/mix';
+import EmitterMixin from '../utils/emittermixin';
+
 export default class Scene {
 	/**
 	 * @param {Game} game
@@ -114,6 +117,8 @@ export default class Scene {
 		this.element.removeChild( item.element );
 	}
 }
+
+mix( Scene, EmitterMixin );
 
 /**
  * @private

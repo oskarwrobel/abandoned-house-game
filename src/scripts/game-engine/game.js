@@ -87,10 +87,12 @@ export default class Game {
 		}
 
 		if ( this.currentScene ) {
+			this.currentScene.fire( 'exit' );
 			this._sceneWrapperElement.removeChild( this.currentScene.element );
 		}
 
 		this._sceneWrapperElement.appendChild( scene.element );
 		this.currentScene = scene;
+		this.currentScene.fire( 'enter' );
 	}
 }
