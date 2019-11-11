@@ -1,4 +1,4 @@
-import { createSvgElement } from './utils/createelement';
+import { createSvgElement } from '../utils/createelement';
 
 export default class HitMap {
 	constructor() {

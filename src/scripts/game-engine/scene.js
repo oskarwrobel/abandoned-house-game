@@ -72,9 +72,10 @@ export default class Scene {
 	 * @param {Number} data.scale
 	 * @param {Number} data.top
 	 * @param {Number} data.left
-	 * @param {Boolean} data.takeable
+	 * @param {Boolean} [data.takeable=false]
+	 * @param {Boolean} [data.droppable=false]
 	 */
-	addItem( item, { scale, top, left, takeable } ) {
+	addItem( item, { scale, top, left, takeable, droppable } ) {
 		if ( this.items.has( item ) ) {
 			throw new Error( 'Item already defined' );
 		}
@@ -89,13 +90,15 @@ export default class Scene {
 		this.element.appendChild( item.element );
 
 		if ( takeable ) {
-			this._refs.click = evt => {
-				evt.stopPropagation();
-				this.removeItem( item );
-				this.game.storage.add( item );
+			const eventRef = () => {
+				if ( !this.game.storage.hasItem( item ) ) {
+					this.removeItem( item );
+					this.game.storage.addItem( item, { droppable } );
+					item.element.removeEventListener( 'click', eventRef );
+				}
 			};
 
-			item.element.addEventListener( 'click', this._refs.click, false );
+			item.element.addEventListener( 'click', eventRef );
 		}
 	}
 
@@ -107,7 +110,6 @@ export default class Scene {
 			throw new Error( 'Cannot remove not existing item.' );
 		}
 
-		item.element.removeEventListener( 'click', this._refs.click );
 		this.items.delete( item );
 		this.element.removeChild( item.element );
 	}

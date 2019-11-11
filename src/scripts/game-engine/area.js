@@ -1,4 +1,4 @@
-import { createSvgElement } from './utils/createelement';
+import { createSvgElement } from '../utils/createelement';
 
 export default class Area {
 	constructor( { data, events } ) {
@@ -23,9 +23,9 @@ export default class Area {
 		}
 	}
 
-	handleDrop( item ) {
-		if ( this.events.drop ) {
-			this.events.drop( item );
+	drop( item ) {
+		if ( this.events.itemDrop ) {
+			this.events.itemDrop( item );
 		}
 	}
 }

@@ -1,5 +1,5 @@
 import Storage from './storage';
-import { createElement } from './utils/createelement';
+import { createElement } from '../utils/createelement';
 
 export default class Game {
 	/**

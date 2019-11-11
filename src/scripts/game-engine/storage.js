@@ -1,4 +1,4 @@
-import { createElement } from './utils/createelement';
+import { createElement } from '../utils/createelement';
 
 export default class Storage {
 	/**
@@ -11,9 +11,10 @@ export default class Storage {
 		this.game = game;
 
 		/**
+		 * @private
 		 * @type {Set.<Item>}
 		 */
-		this.items = new Set();
+		this._items = new Set();
 
 		/**
 		 * @type {SVGElement}
@@ -34,15 +35,48 @@ export default class Storage {
 
 	/**
 	 * @param {Item} item
+	 * @param {Object} [data={}]
+	 * @param {Boolean} [data.droppable=false]
 	 */
-	add( item ) {
+	addItem( item, { droppable } = {} ) {
 		item.scale = this.game.ratio;
-		item.top = 12 * this.game.ratio;
-		item.left = 15 * this.game.ratio;
 
-		this.items.add( item );
+		item.top = 12 * this.game.ratio;
+		item.left = ( 15 + this._getAvailableLeft() ) * this.game.ratio;
+
+		this._items.add( item );
 		this.game.element.appendChild( item.element );
 
+		if ( droppable ) {
+			this._attachDragAndDrop( item );
+		}
+	}
+
+	/**
+	 * @param {Item} item
+	 * @returns {Boolean}
+	 */
+	hasItem( item ) {
+		return this._items.has( item );
+	}
+
+	/**
+	 * @param {Item} item
+	 */
+	removeItem( item ) {
+		this._items.delete( item );
+		this.game.element.removeChild( item.element );
+	}
+
+	_getAvailableLeft() {
+		return Array.from( this._items ).reduce( ( result, item ) => ( result += ( item.width + 15 ) ), 0 );
+	}
+
+	/**
+	 * @private
+	 * @param {Item} item
+	 */
+	_attachDragAndDrop( item ) {
 		let isDragging = false;
 
 		item.element.addEventListener( 'mousedown', () => {
@@ -69,18 +103,10 @@ export default class Storage {
 
 			const hoveredArea = this.game.currentScene.hitMap.hoveredArea;
 
-			if ( !hoveredArea || !hoveredArea.handleDrop( item ) ) {
+			if ( !hoveredArea || !hoveredArea.drop( item ) ) {
 				item.top = 12 * this.game.ratio;
-				item.left = 15 * this.game.ratio;
+				item.left = ( 15 + this._getAvailableLeft() ) * this.game.ratio;
 			}
 		} );
-	}
-
-	/**
-	 * @param {Item} item
-	 */
-	remove( item ) {
-		this.items.delete( item );
-		this.element.removeChild( item.element );
 	}
 }
