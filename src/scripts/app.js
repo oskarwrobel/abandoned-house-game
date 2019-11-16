@@ -1,91 +1,135 @@
 import Game from './game-engine/game';
-import Scene from './game-engine/scene';
-import Item from './game-engine/item';
-
-import createDoor from './game-areas/createdoor';
+import createDoor from './game-items/createdoor';
 
 import '../styles/app.scss';
 
 /* global appImages */
 
-const innerElement = document.querySelector( '#inner' );
-const ratio = ( ( innerElement.clientWidth * 100 ) / 1280 ) / 100;
+const element = document.querySelector( '#inner' );
+const ratio = ( ( element.clientWidth * 100 ) / 1280 ) / 100;
 
 const game = new Game( { ratio } );
-const sceneHall = new Scene( game, { id: 'hall', image: appImages.sceneHall } );
-const sceneHallWall = new Scene( game, { id: 'paint', image: appImages.sceneHallWall } );
-const sceneRoomBasement = new Scene( game, { id: 'room', image: appImages.sceneRoomBasement } );
-const sceneRoomLight = new Scene( game, { id: 'room', image: appImages.sceneRoomLight } );
+const { scenes, items, sounds, storage } = game;
 
-game.addScene( sceneHall );
-game.addScene( sceneHallWall, { back: sceneHall } );
-game.addScene( sceneRoomBasement, { back: sceneHall } );
-game.addScene( sceneRoomLight, { back: sceneHall } );
+scenes.create( 'hall', { image: appImages.sceneHall } );
+scenes.create( 'hall-paint', { image: appImages.sceneHallWall, back: 'hall' } );
+scenes.create( 'room-with-basement', { image: appImages.sceneRoomBasement, back: 'hall' } );
+scenes.create( 'room-light', { image: appImages.sceneRoomLight, back: 'hall' } );
 
-const hallPaintLarge = new Item( {
-	image: appImages.hallPaint,
-	width: 440,
-	height: 570,
+scenes.get( 'hall' ).createItem( 'hall-paint', {
 	attributes: {
-		class: 'clickable hall-paint',
+		image: appImages.hallPaint,
+		classes: [ 'searchable' ],
+	},
+	coords: {
+		top: 180,
+		left: 579,
+		points: [ [ 0, 0 ], [ 123, 0 ], [ 123, 160 ], [ 0, 160 ] ]
 	},
 	events: {
 		click: () => {
-			hallPaintLarge.element.classList.toggle( 'rotated' );
-			game.sounds.play( 'swipe' );
+			if ( storage.isGrabbing ) {
+				return;
+			}
+
+			sounds.play( 'button' );
+			scenes.show( 'hall-paint' );
 		}
 	}
 } );
 
-sceneHall.on( 'exit', () => hallPaintLarge.element.classList.remove( 'rotated' ) );
-
-const key = new Item( {
-	image: appImages.key,
-	width: 21.8,
-	height: 52.2
-} );
-
-const doorA = createDoor( game, {
-	targetScene: {}
-} );
-
-const doorB = createDoor( game, {
-	targetScene: sceneRoomBasement,
-	keys: [ key ]
-} );
-
-const doorC = createDoor( game, {
-	targetScene: {}
-} );
-
-const doorD = createDoor( game, {
-	targetScene: sceneRoomLight,
-	isLocked: false
-} );
-
-const hallPaint = new Item( {
-	image: appImages.hallPaint,
-	width: 440,
-	height: 570,
+scenes.get( 'hall-paint' ).createItem( 'hall-key', {
 	attributes: {
-		class: 'searchable'
+		image: appImages.key,
+		classes: [ 'clickable' ],
+		droppable: true
+	},
+	coords: {
+		points: [ [ 0, 0 ], [ 52, 0 ], [ 52, 130 ], [ 0, 130 ] ],
+		top: 450,
+		left: 730
 	},
 	events: {
 		click: () => {
-			game.sounds.play( 'button' );
-			game.showScene( sceneHallWall );
+			if ( storage.isGrabbing || storage.hasItem( 'hall-key' ) ) {
+				return;
+			}
+
+			const item = items.get( 'hall-key' );
+
+			sounds.play( 'button' );
+			item.points = [ [ 0, 0 ], [ 21, 0 ], [ 21, 52 ], [ 0, 52 ] ];
+			storage.addItem( 'hall-key', { droppable: true } );
 		}
 	}
 } );
 
-sceneHall.addArea( doorA, { points: [ [ 82, 660 ], [ 82, 228 ], [ 222, 228 ], [ 222, 599 ] ] } );
-sceneHall.addArea( doorB, { points: [ [ 340, 542 ], [ 340, 226 ], [ 443, 226 ], [ 443, 498 ] ] } );
-sceneHall.addArea( doorC, { points: [ [ 840, 498 ], [ 840, 226 ], [ 942, 226 ], [ 942, 542 ] ] } );
-sceneHall.addArea( doorD, { points: [ [ 1060, 599 ], [ 1060, 228 ], [ 1200, 228 ], [ 1200, 660 ] ] } );
-sceneHall.addItem( hallPaint, { scale: .28, top: 160, left: 582 } );
+scenes.get( 'hall-paint' ).createItem( 'hall-paint-large', {
+	attributes: {
+		image: appImages.hallPaint,
+		classes: [ 'clickable', 'hall-paint' ]
+	},
+	coords: {
+		left: 420,
+		top: 80,
+		points: [ [ 0, 0 ], [ 440, 0 ], [ 440, 570 ], [ 0, 570 ] ]
+	},
+	events: {
+		click: () => {
+			if ( storage.isGrabbing ) {
+				return;
+			}
 
-sceneHallWall.addItem( key, { scale: 2.5, top: 440, left: 730, takeable: true, droppable: true } );
-sceneHallWall.addItem( hallPaintLarge, { left: 420, top: 80 } );
+			const item = items.get( 'hall-paint-large' );
 
-game.showScene( sceneHall );
-innerElement.appendChild( game.element );
+			item.rotate( item.angle ? 0 : 30, 220, 10 );
+			sounds.play( 'swipe' );
+		}
+	}
+} );
+
+createDoor( game, {
+	id: 'door-a',
+	scene: 'hall',
+	coords: {
+		points: [ [ 82, 660 ], [ 82, 228 ], [ 222, 228 ], [ 222, 599 ] ]
+	},
+	isLocked: true
+} );
+
+createDoor( game, {
+	id: 'door-b',
+	scene: 'hall',
+	coords: {
+		points: [ [ 340, 542 ], [ 340, 226 ], [ 443, 226 ], [ 443, 498 ] ]
+	},
+	target: 'room-with-basement'
+} );
+
+createDoor( game, {
+	id: 'door-c',
+	scene: 'hall',
+	coords: {
+		points: [ [ 840, 498 ], [ 840, 226 ], [ 942, 226 ], [ 942, 542 ] ]
+	},
+	isLocked: true,
+	target: 'room-light',
+	keys: [ 'hall-key' ]
+} );
+
+createDoor( game, {
+	id: 'door-d',
+	scene: 'hall',
+	coords: {
+		points: [ [ 1060, 599 ], [ 1060, 228 ], [ 1200, 228 ], [ 1200, 660 ] ]
+	},
+	isLocked: true
+} );
+
+game.scenes.show( 'hall' );
+element.appendChild( game.element );
+
+window.addEventListener( 'resize', () => {
+	game.ratio = ( ( element.clientWidth * 100 ) / 1280 ) / 100;
+	game.fire( 'refresh' );
+} );

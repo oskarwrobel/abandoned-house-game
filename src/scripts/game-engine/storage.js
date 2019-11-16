@@ -1,4 +1,4 @@
-import { createElement } from '../utils/createelement';
+import { createSvgElement } from '../utils/createelement';
 
 export default class Storage {
 	/**
@@ -11,6 +11,12 @@ export default class Storage {
 		this.game = game;
 
 		/**
+		 * @readonly
+		 * @type {Boolean}
+		 */
+		this.isGrabbing = false;
+
+		/**
 		 * @private
 		 * @type {Set.<Item>}
 		 */
@@ -19,33 +25,20 @@ export default class Storage {
 		/**
 		 * @type {SVGElement}
 		 */
-		this.element = this._render();
+		this.element = createSvgElement( 'svg', { class: 'storage' } );
 	}
 
 	/**
-	 * @private
+	 * @param {String|Item} idOrItem
 	 */
-	_render() {
-		const element = createElement( 'div', { class: 'storage' } );
+	addItem( idOrItem, { droppable = false } = {} ) {
+		const item = typeof idOrItem === 'string' ? this.game.items.get( idOrItem ) : idOrItem;
 
-		element.style.height = this.game.ratio * 80 + 'px';
-
-		return element;
-	}
-
-	/**
-	 * @param {Item} item
-	 * @param {Object} [data={}]
-	 * @param {Boolean} [data.droppable=false]
-	 */
-	addItem( item, { droppable } = {} ) {
-		item.scale = this.game.ratio;
-
-		item.top = 12 * this.game.ratio;
-		item.left = ( 15 + this._getAvailableLeft() ) * this.game.ratio;
+		item.top = 12;
+		item.left = 15 + this._getAvailableLeft();
 
 		this._items.add( item );
-		this.game.element.appendChild( item.element );
+		this.element.appendChild( item.element );
 
 		if ( droppable ) {
 			this._attachDragAndDrop( item );
@@ -53,21 +46,33 @@ export default class Storage {
 	}
 
 	/**
-	 * @param {Item} item
+	 * @param {String|Item} idOrItem
 	 * @returns {Boolean}
 	 */
-	hasItem( item ) {
+	hasItem( idOrItem ) {
+		const item = typeof idOrItem === 'string' ? this.game.items.get( idOrItem ) : idOrItem;
+
 		return this._items.has( item );
 	}
 
 	/**
-	 * @param {Item} item
+	 * @param {String|Item} idOrItem
 	 */
-	removeItem( item ) {
-		this._items.delete( item );
-		this.game.element.removeChild( item.element );
+	removeItem( idOrItem ) {
+		const item = typeof idOrItem === 'string' ? this.game.items.get( idOrItem ) : idOrItem;
+
+		if ( !this.hasItem( idOrItem ) ) {
+			throw new Error( 'Item not exist.' );
+		}
+
+		this._items.delete( idOrItem );
+		this.element.removeChild( item.element );
 	}
 
+	/**
+	 * @private
+	 * @returns {Number}
+	 */
 	_getAvailableLeft() {
 		return Array.from( this._items ).reduce( ( result, item ) => ( result += ( item.width + 15 ) ), 0 );
 	}
@@ -78,27 +83,35 @@ export default class Storage {
 	 */
 	_attachDragAndDrop( item ) {
 		let previousLeft;
+		const { ratio, items } = this.game;
 
 		const moveItemRef = evt => {
 			if ( !previousLeft ) {
 				previousLeft = item.left;
 			}
 
-			item.top = evt.clientY;
-			item.left = evt.clientX;
+			const percentageTop = ( evt.clientY * 100 ) / ( 720 * ratio );
+			const percentageLeft = ( evt.clientX * 100 ) / ( 1280 * ratio );
+
+			item.top = ( 720 * percentageTop ) / 100;
+			item.left = ( 1280 * percentageLeft ) / 100;
 		};
 
 		const dropItemRef = evt => {
 			evt.stopPropagation();
 
-			const hoveredArea = this.game.currentScene.hitMap.hoveredArea;
+			const target = evt.target;
 
+			this.isGrabbing = false;
 			item.element.classList.remove( 'dragging' );
+			this.game.element.classList.remove( 'grabbing' );
 			document.removeEventListener( 'mousemove', moveItemRef );
 			document.removeEventListener( 'click', dropItemRef );
 
-			if ( !hoveredArea || !hoveredArea.drop( item ) ) {
-				item.top = 12 * this.game.ratio;
+			const isDropped = target.id && items.has( target.id ) && items.get( target.id ).drop( item );
+
+			if ( !isDropped ) {
+				item.top = 12;
 				item.left = previousLeft;
 			}
 
@@ -108,7 +121,9 @@ export default class Storage {
 		item.element.addEventListener( 'click', evt => {
 			evt.stopPropagation();
 
+			this.isGrabbing = true;
 			item.element.classList.add( 'dragging' );
+			this.game.element.classList.add( 'grabbing' );
 			document.addEventListener( 'mousemove', moveItemRef );
 			document.addEventListener( 'click', dropItemRef );
 		} );

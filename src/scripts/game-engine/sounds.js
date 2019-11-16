@@ -17,6 +17,13 @@ export default class Sounds {
 	}
 
 	play( name ) {
-		this._sounds.get( name ).play();
+		if ( !this._sounds.has( name ) ) {
+			throw new Error( 'Sound is not defined.' );
+		}
+
+		const sound = this._sounds.get( name );
+
+		sound.currentTime = 0;
+		sound.play();
 	}
 }

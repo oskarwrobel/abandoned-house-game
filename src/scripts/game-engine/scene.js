@@ -1,5 +1,4 @@
-import HitMap from './hitmap';
-
+import { createSvgElement } from '../utils/createelement';
 import mix from '../utils/mix';
 import EmitterMixin from '../utils/emittermixin';
 
@@ -22,110 +21,56 @@ export default class Scene {
 		this.id = id;
 
 		/**
-		 * @type {Set<Area>}
-		 */
-		this.items = new Set();
-
-		/**
 		 * @member {HTMLElement} #element
 		 */
 		this.element = this._render( { id, image } );
-
-		/**
-		 * @type {HitMap}
-		 */
-		this.hitMap = new HitMap( { ratio: this.game.ratio } );
-		this.element.appendChild( this.hitMap.element );
 	}
 
 	/**
 	 * @private
 	 * @param {String} id
 	 * @param {String} image
-	 * @returns {HTMLDivElement}
+	 * @returns {HTMLElement}
 	 */
 	_render( { id, image } ) {
-		const element = document.createElement( 'div' );
+		const element = createSvgElement( 'svg' );
 
-		element.classList.add( 'scene', `scene-${ id }` );
+		element.id = `scene-${ id }`;
+		element.classList.add( 'scene' );
 		element.style.backgroundImage = `url(${ image })`;
 
 		return element;
 	}
 
 	/**
-	 * @param {Area} area
+	 * @param {String} id
 	 * @param {Object} data
-	 * @param {Array<Array.<Number>>} data.points
-	 */
-	addArea( area, { points } ) {
-		area.points = parsePoints( points, this.game.ratio );
-		this.hitMap.add( area );
-	}
-
-	/**
-	 * @param {Item} item
-	 * @param {Object} data
-	 * @param {Number} data.scale
 	 * @param {Number} data.top
 	 * @param {Number} data.left
+	 * @param {Number} data.width
+	 * @param {Number} data.height
 	 * @param {Boolean} [data.takeable=false]
 	 * @param {Boolean} [data.droppable=false]
 	 */
-	addItem( item, { scale = 1, top, left, takeable, droppable } ) {
-		if ( this.items.has( item ) ) {
-			throw new Error( 'Item already defined' );
-		}
+	createItem( id, data ) {
+		const item = this.game.items.create( id, data );
 
-		const { ratio } = this.game;
+		this.addItem( item, data.coords );
 
-		item.top = top * ratio;
-		item.left = left * ratio;
-		item.scale = scale * ratio;
-
-		this.items.add( item );
-		this.element.appendChild( item.element );
-
-		if ( takeable ) {
-			const eventRef = () => {
-				if ( !this.game.storage.hasItem( item ) ) {
-					this.game.sounds.play( 'button' );
-					this.removeItem( item );
-					this.game.storage.addItem( item, { droppable } );
-					item.element.removeEventListener( 'click', eventRef );
-				}
-			};
-
-			item.element.addEventListener( 'click', eventRef );
-		}
+		return item;
 	}
 
-	/**
-	 * @param {Item} item
-	 */
-	removeItem( item ) {
-		if ( !this.items.has( item ) ) {
-			throw new Error( 'Cannot remove not existing item.' );
+	addItem( idOrItem, coords ) {
+		const item = typeof idOrItem === 'string' ? this.game.items.get( idOrItem ) : idOrItem;
+
+		item.element.remove();
+
+		for ( const property of Object.keys( coords ) ) {
+			item[ property ] = coords[ property ];
 		}
 
-		this.items.delete( item );
-		this.element.removeChild( item.element );
+		this.element.appendChild( item.element );
 	}
 }
 
 mix( Scene, EmitterMixin );
-
-/**
- * @private
- * @param {Array.<Array.<Number>>} points
- * @param {Number} ratio
- * @returns {String}
- */
-function parsePoints( points, ratio ) {
-	points = points.map( point => point.map( value => ( value * ratio ) ) );
-
-	points.forEach( point => point.join( ',' ) );
-	points.join( ' ' );
-
-	return points;
-}
