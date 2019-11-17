@@ -1,3 +1,6 @@
+const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
+const audioContext = new AudioContextConstructor();
+
 export default class Sounds {
 	constructor( initialData ) {
 		this._sounds = new Map();
@@ -9,11 +12,10 @@ export default class Sounds {
 
 	add( name, path ) {
 		if ( this._sounds.has( name ) ) {
-			throw new Error( 'Sound already exist.' );
+			throw new Error( 'Sound is already defined.' );
 		}
 
-		// TODO preloading
-		this._sounds.set( name, new Audio( path ) );
+		loadSound( path ).then( buffer => this._sounds.set( name, buffer ) );
 	}
 
 	play( name ) {
@@ -21,9 +23,30 @@ export default class Sounds {
 			throw new Error( 'Sound is not defined.' );
 		}
 
-		const sound = this._sounds.get( name );
+		const src = audioContext.createBufferSource();
 
-		sound.currentTime = 0;
-		sound.play();
+		src.buffer = this._sounds.get( name );
+
+		const gain = audioContext.createGain();
+
+		src.connect( gain );
+		gain.connect( audioContext.destination );
+		gain.gain.value = 1;
+
+		src.start();
 	}
+}
+
+function loadSound( url ) {
+	return new Promise( resolve => {
+		const req = new XMLHttpRequest();
+
+		req.addEventListener( 'load', () => {
+			audioContext.decodeAudioData( req.response, resolve );
+		} );
+
+		req.open( 'GET', url, true );
+		req.responseType = 'arraybuffer';
+		req.send();
+	} );
 }
