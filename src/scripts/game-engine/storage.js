@@ -108,7 +108,7 @@ export default class Storage {
 			document.removeEventListener( 'mousemove', moveItemRef );
 			document.removeEventListener( 'click', dropItemRef );
 
-			const isDropped = target.id && items.has( target.id ) && items.get( target.id ).drop( item );
+			const isDropped = items.has( target.id ) && items.get( target.id ).fire( 'drop', item );
 
 			if ( !isDropped ) {
 				item.top = 12;

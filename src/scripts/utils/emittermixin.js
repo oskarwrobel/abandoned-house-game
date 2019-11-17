@@ -1,27 +1,68 @@
 export default {
-	_events: new Set(),
-
 	on( eventName, callback ) {
-		this._events.add( [ eventName, callback ] );
+		this._events = this._events || new Map();
+
+		const callbacks = this._events.get( eventName ) || [];
+
+		callbacks.push( callback );
+		this._events.set( eventName, callbacks );
 	},
 
 	off( eventName, callback ) {
-		for ( const entry of this._events ) {
-			if ( entry[ 0 ] === eventName ) {
-				if ( callback && entry[ 1 ] !== callback ) {
-					continue;
-				}
+		if ( !this._events.has( eventName ) ) {
+			return;
+		}
 
-				this._events.delete( entry );
-			}
+		if ( !callback ) {
+			this._events.delete( eventName );
+
+			return;
+		}
+
+		let callbacks = this._events.get( eventName );
+
+		if ( callbacks.includes( callback ) ) {
+			callbacks = callbacks.filter( cb => cb !== callback );
+		}
+
+		if ( !callbacks.length ) {
+			this._events.delete( eventName );
+		} else {
+			this._events.set( eventName, callbacks );
 		}
 	},
 
 	fire( eventName, ...args ) {
-		for ( const entry of this._events ) {
-			if ( entry[ 0 ] === eventName ) {
-				entry[ 1 ]( ...args );
+		if ( !this._events ) {
+			return;
+		}
+
+		const callbacks = this._events.get( eventName );
+
+		if ( !callbacks ) {
+			return;
+		}
+
+		let returnValue;
+
+		for ( const callback of callbacks ) {
+			const off = () => this.off( eventName, callback );
+			const evt = new EventInfo( off );
+
+			callback( evt, ...args );
+
+			if ( evt.return !== undefined ) {
+				returnValue = evt.return;
 			}
 		}
+
+		return returnValue;
 	}
 };
+
+class EventInfo {
+	constructor( off ) {
+		this.off = off;
+		this.return = undefined;
+	}
+}

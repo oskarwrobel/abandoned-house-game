@@ -18,13 +18,13 @@ export default function createDoor( game, { id, scene, coords, target, keys = []
 					game.sounds.play( 'doorLocked' );
 				}
 			},
-			dropItem: droppedItem => {
+			drop: ( evt, droppedItem ) => {
 				if ( keys.includes( droppedItem.id ) || keys.includes( droppedItem ) ) {
 					game.sounds.play( 'doorUnlock' );
 					game.storage.removeItem( droppedItem );
 					item.data.isLocked = false;
 
-					return true;
+					evt.return = true;
 				} else {
 					game.sounds.play( 'doorLocked' );
 				}

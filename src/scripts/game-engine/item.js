@@ -1,5 +1,10 @@
 import { createSvgElement } from '../utils/createelement';
 
+import mix from '../utils/mix';
+import EmitterMixin from '../utils/emittermixin';
+
+const customEvents = new Set( [ 'drop' ] );
+
 export default class Item {
 	constructor( game, { id, coords = {}, attributes = {}, events = {}, data = {} } ) {
 		/**
@@ -54,7 +59,6 @@ export default class Item {
 		this._updateCoords();
 		this.game.on( 'refresh', () => this._updateCoords() );
 
-		// Handle events.
 		this._attachEvents( events );
 	}
 
@@ -174,7 +178,9 @@ export default class Item {
 	 */
 	_attachEvents( events = {} ) {
 		for ( const name of Object.keys( events ) ) {
-			if ( name !== 'dropItem' ) {
+			if ( customEvents.has( name ) ) {
+				this.on( name, events[ name ] );
+			} else {
 				this.element.addEventListener( name, events[ name ], false );
 			}
 		}
@@ -218,10 +224,6 @@ export default class Item {
 		polygon.removeAttribute( 'transform' );
 		this.rotate( angle[ 0 ], angle[ 1 ], angle[ 2 ] );
 	}
-
-	drop( item ) {
-		if ( this.events.dropItem ) {
-			return this.events.dropItem( item );
-		}
-	}
 }
+
+mix( Item, EmitterMixin );
