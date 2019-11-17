@@ -35,7 +35,7 @@ export default class Storage {
 		const item = typeof idOrItem === 'string' ? this.game.items.get( idOrItem ) : idOrItem;
 
 		item.top = 12;
-		item.left = 15 + this._getAvailableLeft();
+		item.left = 20 + this._getAvailableLeft();
 
 		this._items.add( item );
 		this.element.appendChild( item.element );
@@ -74,7 +74,7 @@ export default class Storage {
 	 * @returns {Number}
 	 */
 	_getAvailableLeft() {
-		return Array.from( this._items ).reduce( ( result, item ) => ( result += ( item.width + 15 ) ), 0 );
+		return Array.from( this._items ).reduce( ( result, item ) => ( result += ( item.width + 25 ) ), 0 );
 	}
 
 	/**

@@ -13,7 +13,7 @@ export default function createDoor( game, { id, scene, coords, target, keys = []
 
 				if ( !item.data.isLocked ) {
 					game.sounds.play( 'doorOpen' );
-					setTimeout( () => game.scenes.show( target ), 300 );
+					game.scenes.show( target );
 				} else {
 					game.sounds.play( 'doorLocked' );
 				}
@@ -25,6 +25,8 @@ export default function createDoor( game, { id, scene, coords, target, keys = []
 					item.data.isLocked = false;
 
 					return true;
+				} else {
+					game.sounds.play( 'doorLocked' );
 				}
 			}
 		}

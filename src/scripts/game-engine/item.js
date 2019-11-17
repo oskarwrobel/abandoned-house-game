@@ -17,6 +17,9 @@ export default class Item {
 		 */
 		this.data = data;
 
+		/**
+		 * @type {Object}
+		 */
 		this.events = events;
 
 		/**

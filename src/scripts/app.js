@@ -1,4 +1,5 @@
 import Game from './game-engine/game';
+import Flashlight from './game-items/flashlight';
 import createDoor from './game-items/createdoor';
 
 import '../styles/app.scss';
@@ -125,6 +126,9 @@ createDoor( game, {
 	},
 	isLocked: true
 } );
+
+items.add( new Flashlight( game ) );
+storage.addItem( 'flashlight' );
 
 game.scenes.show( 'hall' );
 element.appendChild( game.element );

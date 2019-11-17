@@ -33,6 +33,18 @@ export default class Items {
 		return item;
 	}
 
+	add( item ) {
+		if ( !( item instanceof Item ) ) {
+			return new Error( 'Invalid Item instance.' );
+		}
+
+		if ( this._idToItem.has( item.id ) ) {
+			throw new Error( 'Cannot add the same item more than once.' );
+		}
+
+		this._idToItem.set( item.id, item );
+	}
+
 	get( id ) {
 		if ( !this.has( id ) ) {
 			throw new Error( 'Item not defined' );
