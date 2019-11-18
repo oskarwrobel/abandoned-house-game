@@ -20,7 +20,7 @@ scenes.create( 'room-light', { image: appImages.sceneRoomLight, back: 'hall' } )
 scenes.get( 'hall' ).createItem( 'hall-paint', {
 	attributes: {
 		image: appImages.hallPaint,
-		classes: [ 'searchable' ],
+		classes: [ 'searchable' ]
 	},
 	coords: {
 		top: 180,
@@ -81,9 +81,17 @@ scenes.get( 'hall-paint' ).createItem( 'hall-paint-large', {
 				return;
 			}
 
-			const item = items.get( 'hall-paint-large' );
+			const paintLarge = items.get( 'hall-paint-large' );
+			const paint = items.get( 'hall-paint' );
 
-			item.rotate( item.angle ? 0 : 30, 220, 10 );
+			if ( paintLarge.angle ) {
+				paintLarge.rotate( 0, 220, 10 );
+				paint.rotate( 0, 25, 3 );
+			} else {
+				paintLarge.rotate( 30, 220, 10 );
+				paint.rotate( 18, 25, 5 );
+			}
+
 			sounds.play( 'swipe' );
 		}
 	}
