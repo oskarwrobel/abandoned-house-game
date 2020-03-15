@@ -3,19 +3,14 @@
 /* eslint-env node */
 
 const path = require( 'path' );
-const { DefinePlugin } = require( 'webpack' );
 const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 
-module.exports = ( env = {} ) => {
+module.exports = () => {
 	const entry = [
 		path.join( process.cwd(), 'src', 'scripts', 'app.js' )
 	];
-
-	if ( env.analytics ) {
-		entry.push( path.join( process.cwd(), 'src', 'scripts', 'analytics.js' ) );
-	}
 
 	const webpackConfig = {
 		entry,
@@ -72,9 +67,6 @@ module.exports = ( env = {} ) => {
 			} ),
 			new MiniCssExtractPlugin( {
 				filename: '[name].[contenthash].css'
-			} ),
-			new DefinePlugin( {
-				ANALYTICS: JSON.stringify( env.analytics )
 			} )
 		]
 	};
