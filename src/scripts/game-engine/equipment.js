@@ -1,5 +1,8 @@
 import { createSvgElement } from '../utils/createelement';
 
+const paddingTop = 12;
+const paddingLeft = 20;
+
 export default class Storage {
 	/**
 	 * @param {Game} game
@@ -34,8 +37,8 @@ export default class Storage {
 	addItem( idOrItem, { droppable = false } = {} ) {
 		const item = typeof idOrItem === 'string' ? this.game.items.get( idOrItem ) : idOrItem;
 
-		item.top = 12;
-		item.left = 20 + this._getAvailableLeft();
+		item.top = paddingTop;
+		item.left = this._getAvailableLeft() + paddingLeft;
 
 		this._items.add( item );
 		this.element.appendChild( item.element );
@@ -74,7 +77,7 @@ export default class Storage {
 	 * @returns {Number}
 	 */
 	_getAvailableLeft() {
-		return Array.from( this._items ).reduce( ( result, item ) => ( result += ( item.width + 25 ) ), 0 );
+		return Array.from( this._items ).reduce( ( result, item ) => ( result + item.width + paddingLeft ), 0 );
 	}
 
 	/**
@@ -83,18 +86,19 @@ export default class Storage {
 	 */
 	_attachDragAndDrop( item ) {
 		let previousLeft;
-		const { ratio, items } = this.game;
+		const { items } = this.game;
 
 		const moveItemRef = evt => {
 			if ( !previousLeft ) {
 				previousLeft = item.left;
 			}
 
-			const percentageTop = ( evt.clientY * 100 ) / ( 720 * ratio );
-			const percentageLeft = ( evt.clientX * 100 ) / ( 1280 * ratio );
+			const gameBound = this.game.element.getBoundingClientRect();
+			const x = ( evt.clientX - gameBound.left ) / this.game.sizeFactor;
+			const y = ( evt.clientY - gameBound.top ) / this.game.sizeFactor;
 
-			item.top = ( 720 * percentageTop ) / 100;
-			item.left = ( 1280 * percentageLeft ) / 100;
+			item.top = y;
+			item.left = x;
 		};
 
 		const dropItemRef = evt => {
@@ -111,7 +115,7 @@ export default class Storage {
 			const isDropped = items.has( target.id ) && items.get( target.id ).fire( 'drop', item );
 
 			if ( !isDropped ) {
-				item.top = 12;
+				item.top = paddingTop;
 				item.left = previousLeft;
 			}
 
