@@ -1,35 +1,47 @@
 import Game from './game-engine/game';
 import Flashlight from './game-items/flashlight';
 import createDoor from './game-items/createdoor';
+import createBackButton from './game-items/createbackButton';
 
-import '../styles/app.scss';
+import '../styles/app.css';
 
-/* global appImages */
+/* global appData */
 
-const element = document.querySelector( '#inner' );
-const ratio = ( ( element.clientWidth * 100 ) / 1280 ) / 100;
+const backButtonCoords = {
+	top: 625,
+	left: 1100
+};
 
-const game = new Game( { ratio } );
-const { scenes, items, sounds, storage } = game;
+// Creates a game.
+const game = new Game( {
+	resolution: '1280x720',
+	images: appData.images,
+	sounds: appData.sounds
+} );
+const { scenes, items, sounds, equipment } = game;
 
-scenes.create( 'hall', { image: appImages.sceneHall } );
-scenes.create( 'hall-paint', { image: appImages.sceneHallWall, back: 'hall' } );
-scenes.create( 'room-with-basement', { image: appImages.sceneRoomBasement, back: 'hall' } );
-scenes.create( 'room-light', { image: appImages.sceneRoomLight, back: 'hall' } );
+// Creates main hall scene
+// -------------------------------------------------------------------------------------------------------------------------------------- //
+const hallScene = scenes.create( {
+	id: 'hall',
+	image: 'sceneHall'
+} );
 
-scenes.get( 'hall' ).createItem( 'hall-paint', {
+// Adds pain to main hall scene.
+hallScene.createItem( {
+	id: 'hall-paint',
 	attributes: {
-		image: appImages.hallPaint,
+		image: 'hallPaint',
 		classes: [ 'searchable' ]
 	},
 	coords: {
 		top: 180,
 		left: 579,
-		points: [ [ 0, 0 ], [ 123, 0 ], [ 123, 160 ], [ 0, 160 ] ]
+		shape: [ [ 0, 0 ], [ 123, 0 ], [ 123, 160 ], [ 0, 160 ] ]
 	},
 	events: {
 		click: () => {
-			if ( storage.isGrabbing ) {
+			if ( equipment.isGrabbing ) {
 				return;
 			}
 
@@ -39,45 +51,113 @@ scenes.get( 'hall' ).createItem( 'hall-paint', {
 	}
 } );
 
-scenes.get( 'hall-paint' ).createItem( 'hall-key', {
+hallScene.addItem(
+	createDoor( game, {
+		id: 'door-a',
+		shape: [ [ 0, 432 ], [ 0, 0 ], [ 141, 0 ], [ 141, 373 ] ],
+		isLocked: true
+	} ),
+	{
+		top: 228,
+		left: 82
+	}
+);
+
+hallScene.addItem(
+	createDoor( game, {
+		id: 'door-b',
+		shape: [ [ 0, 316 ], [ 0, 0 ], [ 104, 0 ], [ 104, 272 ] ],
+		target: 'room-with-basement'
+	} ),
+	{
+		top: 226,
+		left: 340
+	}
+);
+
+hallScene.addItem(
+	createDoor( game, {
+		id: 'door-c',
+		shape: [ [ 0, 272 ], [ 0, 0 ], [ 102, 0 ], [ 102, 316 ] ],
+		isLocked: true
+	} ),
+	{
+		top: 226,
+		left: 840
+	}
+);
+
+hallScene.addItem(
+	createDoor( game, {
+		id: 'door-d',
+		scene: hallScene,
+		shape: [ [ 0, 371 ], [ 0, 0 ], [ 140, 0 ], [ 140, 432 ] ],
+		isLocked: true,
+		target: 'room-light',
+		keys: [ 'hall-key' ]
+	} ),
+	{
+		top: 228,
+		left: 1060
+	}
+);
+
+// Creates paint scene
+// -------------------------------------------------------------------------------------------------------------------------------------- //
+const hallPaintScene = scenes.create( {
+	id: 'hall-paint',
+	image: 'sceneHallWall'
+} );
+
+hallPaintScene.addItem(
+	createBackButton( game, {
+		id: 'hall-paint-back',
+		backScene: hallScene
+	} ),
+	backButtonCoords
+);
+
+hallPaintScene.createItem( {
+	id: 'hall-key',
 	attributes: {
-		image: appImages.key,
+		image: 'key',
 		classes: [ 'clickable' ],
 		droppable: true
 	},
 	coords: {
-		points: [ [ 0, 0 ], [ 52, 0 ], [ 52, 130 ], [ 0, 130 ] ],
 		top: 450,
-		left: 730
+		left: 730,
+		shape: [ [ 0, 0 ], [ 52, 0 ], [ 52, 130 ], [ 0, 130 ] ]
 	},
 	events: {
 		click: () => {
-			if ( storage.isGrabbing || storage.hasItem( 'hall-key' ) ) {
+			if ( equipment.isGrabbing || equipment.hasItem( 'hall-key' ) ) {
 				return;
 			}
 
 			const item = items.get( 'hall-key' );
 
 			sounds.play( 'button' );
-			item.points = [ [ 0, 0 ], [ 21, 0 ], [ 21, 52 ], [ 0, 52 ] ];
-			storage.addItem( 'hall-key', { droppable: true } );
+			item.shape = [ [ 0, 0 ], [ 21, 0 ], [ 21, 52 ], [ 0, 52 ] ];
+			equipment.addItem( 'hall-key', { droppable: true } );
 		}
 	}
 } );
 
-scenes.get( 'hall-paint' ).createItem( 'hall-paint-large', {
+hallPaintScene.createItem( {
+	id: 'hall-paint-large',
 	attributes: {
-		image: appImages.hallPaint,
+		image: 'hallPaint',
 		classes: [ 'clickable', 'hall-paint' ]
 	},
 	coords: {
 		left: 420,
 		top: 80,
-		points: [ [ 0, 0 ], [ 440, 0 ], [ 440, 570 ], [ 0, 570 ] ]
+		shape: [ [ 0, 0 ], [ 440, 0 ], [ 440, 570 ], [ 0, 570 ] ]
 	},
 	events: {
 		click: () => {
-			if ( storage.isGrabbing ) {
+			if ( equipment.isGrabbing ) {
 				return;
 			}
 
@@ -97,51 +177,46 @@ scenes.get( 'hall-paint' ).createItem( 'hall-paint-large', {
 	}
 } );
 
-createDoor( game, {
-	id: 'door-a',
-	scene: 'hall',
-	coords: {
-		points: [ [ 82, 660 ], [ 82, 228 ], [ 222, 228 ], [ 222, 599 ] ]
-	},
-	isLocked: true
+// Room with basement scene
+// -------------------------------------------------------------------------------------------------------------------------------------- //
+const roomBasementScene = scenes.create( {
+	id: 'room-with-basement',
+	image: 'sceneRoomBasement'
 } );
 
-createDoor( game, {
-	id: 'door-b',
-	scene: 'hall',
-	coords: {
-		points: [ [ 340, 542 ], [ 340, 226 ], [ 443, 226 ], [ 443, 498 ] ]
-	},
-	target: 'room-with-basement'
+roomBasementScene.addItem(
+	createBackButton( game, {
+		id: 'room-with-basement-back',
+		backScene: hallScene
+	} ),
+	backButtonCoords
+);
+
+// Light room scene
+// -------------------------------------------------------------------------------------------------------------------------------------- //
+const lightRoomScene = scenes.create( {
+	id: 'room-light',
+	image: 'sceneRoomLight'
 } );
 
-createDoor( game, {
-	id: 'door-c',
-	scene: 'hall',
-	coords: {
-		points: [ [ 840, 498 ], [ 840, 226 ], [ 942, 226 ], [ 942, 542 ] ]
-	},
-	isLocked: true,
-	target: 'room-light',
-	keys: [ 'hall-key' ]
-} );
+lightRoomScene.addItem(
+	createBackButton( game, {
+		id: 'room-light-back',
+		backScene: hallScene
+	} ),
+	backButtonCoords
+);
 
-createDoor( game, {
-	id: 'door-d',
-	scene: 'hall',
-	coords: {
-		points: [ [ 1060, 599 ], [ 1060, 228 ], [ 1200, 228 ], [ 1200, 660 ] ]
-	},
-	isLocked: true
-} );
-
+// Adds flashlight to the storage (just to test it).
 items.add( new Flashlight( game ) );
-storage.addItem( 'flashlight' );
+equipment.addItem( 'flashlight' );
 
+// Shows main hall scene an initial scene.
 game.scenes.show( 'hall' );
-element.appendChild( game.element );
 
-window.addEventListener( 'resize', () => {
-	game.ratio = ( ( element.clientWidth * 100 ) / 1280 ) / 100;
-	game.fire( 'refresh' );
-} );
+// Append game to the DOM.
+document.querySelector( '#root' ).appendChild( game.element );
+
+// Adjust game size each time screen has changed.
+window.addEventListener( 'resize', () => game.update() );
+window.addEventListener( 'orientationchange', () => game.update() );

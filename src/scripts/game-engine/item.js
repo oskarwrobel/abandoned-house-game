@@ -1,12 +1,12 @@
-import { createSvgElement } from '../utils/createelement';
+import { createSvgElement } from './utils/createelement';
 
-import mix from '../utils/mix';
-import EmitterMixin from '../utils/emittermixin';
+import mix from './utils/mix';
+import EmitterMixin from './utils/emittermixin';
 
 const customEvents = new Set( [ 'drop' ] );
 
 export default class Item {
-	constructor( game, { id, coords = {}, attributes = {}, events = {}, data = {} } ) {
+	constructor( game, { id, coords = {}, attributes = {}, events = {}, states = {} } ) {
 		/**
 		 * @type {Game}
 		 */
@@ -20,7 +20,7 @@ export default class Item {
 		/**
 		 * @type {Object}
 		 */
-		this.data = data;
+		this.states = states;
 
 		/**
 		 * @type {Object}
@@ -49,7 +49,7 @@ export default class Item {
 		 * @private
 		 * @type {Array.<Array.<Number>>}
 		 */
-		this._points = coords.points;
+		this._shape = coords.shape;
 
 		/**
 		 * @type {HTMLElement}
@@ -57,7 +57,7 @@ export default class Item {
 		this.element = this._render( attributes );
 
 		this._updateCoords();
-		this.game.on( 'refresh', () => this._updateCoords() );
+		this.game.on( 'update', () => this._updateCoords() );
 
 		this._attachEvents( events );
 	}
@@ -68,8 +68,12 @@ export default class Item {
 	 * @returns {HTMLElement}
 	 */
 	_render( { image, classes = [] } = {} ) {
+		if ( this.game.images.get( image ) ) {
+			image = this.game.images.get( image );
+		}
+
 		const g = createSvgElement( 'g' );
-		const polygon = createSvgElement( 'polygon', { points: this._pointsToString() } );
+		const polygon = createSvgElement( 'polygon', { points: this._shapeToPoints() } );
 
 		if ( image ) {
 			const patternElement = createSvgElement( 'pattern', {
@@ -118,13 +122,13 @@ export default class Item {
 		return this._left;
 	}
 
-	set points( value ) {
-		this._points = value;
-		this.element.querySelector( 'polygon' ).setAttribute( 'points', this._pointsToString() );
+	set shape( value ) {
+		this._shape = value;
+		this.element.querySelector( 'polygon' ).setAttribute( 'points', this._shapeToPoints() );
 	}
 
 	get width() {
-		return this._points.reduce( ( result, point ) => {
+		return this._shape.reduce( ( result, point ) => {
 			if ( result < point[ 0 ] ) {
 				return point[ 0 ];
 			}
@@ -134,7 +138,7 @@ export default class Item {
 	}
 
 	get height() {
-		return this._points.reduce( ( result, point ) => {
+		return this._shape.reduce( ( result, point ) => {
 			if ( result < point[ 1 ] ) {
 				return point[ 1 ];
 			}
@@ -166,8 +170,8 @@ export default class Item {
 			y += this.top;
 		}
 
-		x *= this.game.ratio;
-		y *= this.game.ratio;
+		x *= this.game.sizeFactor;
+		y *= this.game.sizeFactor;
 
 		this.element.querySelector( 'polygon' ).setAttribute( 'transform', `rotate(${ angle } ${ x } ${ y })` );
 	}
@@ -186,12 +190,12 @@ export default class Item {
 		}
 	}
 
-	_pointsToString() {
-		const ratio = this.game.ratio;
+	_shapeToPoints() {
+		const sizeFactor = this.game.sizeFactor;
 
-		return this._points.map( point => {
-			const x = ( point[ 0 ] * ratio ) + ( this._left * ratio );
-			const y = ( point[ 1 ] * ratio ) + ( this._top * ratio );
+		return this._shape.map( point => {
+			const x = ( point[ 0 ] * sizeFactor ) + ( this._left * sizeFactor );
+			const y = ( point[ 1 ] * sizeFactor ) + ( this._top * sizeFactor );
 
 			return [ x, y ].join( ',' );
 		} ).join( ' ' );
@@ -201,10 +205,10 @@ export default class Item {
 		const polygon = this.element.querySelector( 'polygon' );
 		const pattern = this.element.querySelector( 'pattern' );
 
-		polygon.setAttribute( 'points', this._pointsToString() );
+		polygon.setAttribute( 'points', this._shapeToPoints() );
 
 		if ( pattern ) {
-			const ratio = this.game.ratio;
+			const ratio = this.game.sizeFactor;
 			const left = this.left * ratio;
 			const top = this.top * ratio;
 			const width = this.width * ratio;

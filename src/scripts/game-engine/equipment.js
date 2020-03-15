@@ -1,9 +1,9 @@
-import { createSvgElement } from '../utils/createelement';
+import { createSvgElement } from './utils/createelement';
 
 const paddingTop = 12;
-const paddingLeft = 20;
+const paddingLeft = 25;
 
-export default class Storage {
+export default class Equipment {
 	/**
 	 * @param {Game} game
 	 */
@@ -28,7 +28,7 @@ export default class Storage {
 		/**
 		 * @type {SVGElement}
 		 */
-		this.element = createSvgElement( 'svg', { class: 'storage' } );
+		this.element = createSvgElement( 'svg', { class: 'equipment' } );
 	}
 
 	/**
@@ -86,35 +86,52 @@ export default class Storage {
 	 */
 	_attachDragAndDrop( item ) {
 		let previousLeft;
-		const { items } = this.game;
 
-		const moveItemRef = evt => {
-			if ( !previousLeft ) {
-				previousLeft = item.left;
+		const moveItem = evt => {
+			evt.preventDefault();
+
+			let clientX, clientY;
+
+			if ( evt.touches ) {
+				const [ touch ] = evt.touches;
+
+				clientX = touch.clientX;
+				clientY = touch.clientY;
+			} else {
+				clientX = evt.clientX;
+				clientY = evt.clientY;
 			}
 
-			const gameBound = this.game.element.getBoundingClientRect();
-			const x = ( evt.clientX - gameBound.left ) / this.game.sizeFactor;
-			const y = ( evt.clientY - gameBound.top ) / this.game.sizeFactor;
+			const gameBounds = this.game.element.getBoundingClientRect();
 
-			item.top = y;
-			item.left = x;
+			item.top = ( clientY - gameBounds.top ) / this.game.sizeFactor;
+			item.left = ( clientX - gameBounds.left ) / this.game.sizeFactor;
 		};
 
-		const dropItemRef = evt => {
-			evt.stopPropagation();
+		const dropItem = evt => {
+			evt.preventDefault();
 
-			const target = evt.target;
+			let clientX, clientY;
+
+			if ( evt.changedTouches ) {
+				const [ touch ] = evt.changedTouches;
+
+				clientX = touch.clientX;
+				clientY = touch.clientY;
+			} else {
+				clientX = evt.clientX;
+				clientY = evt.clientY;
+			}
 
 			this.isGrabbing = false;
 			item.element.classList.remove( 'dragging' );
 			this.game.element.classList.remove( 'grabbing' );
-			document.removeEventListener( 'mousemove', moveItemRef );
-			document.removeEventListener( 'click', dropItemRef );
+			document.removeEventListener( 'mousemove', moveItem );
+			document.removeEventListener( 'click', dropItem );
+			document.removeEventListener( 'touchmove', moveItem );
+			document.removeEventListener( 'touchend', dropItem );
 
-			const isDropped = items.has( target.id ) && items.get( target.id ).fire( 'drop', item );
-
-			if ( !isDropped ) {
+			if ( !this._checkDropTarget( item, clientX, clientY ) ) {
 				item.top = paddingTop;
 				item.left = previousLeft;
 			}
@@ -122,14 +139,32 @@ export default class Storage {
 			previousLeft = null;
 		};
 
-		item.element.addEventListener( 'click', evt => {
+		const dragItem = evt => {
+			evt.preventDefault();
 			evt.stopPropagation();
+
+			previousLeft = item.left;
 
 			this.isGrabbing = true;
 			item.element.classList.add( 'dragging' );
 			this.game.element.classList.add( 'grabbing' );
-			document.addEventListener( 'mousemove', moveItemRef );
-			document.addEventListener( 'click', dropItemRef );
-		} );
+			document.addEventListener( 'mousemove', moveItem );
+			document.addEventListener( 'click', dropItem );
+			document.addEventListener( 'touchmove', moveItem );
+			document.addEventListener( 'touchend', dropItem );
+		};
+
+		item.element.addEventListener( 'click', dragItem );
+		item.element.addEventListener( 'touchstart', dragItem );
+	}
+
+	_checkDropTarget( item, clientX, clientY ) {
+		const items = this.game.items;
+
+		for ( const element of document.elementsFromPoint( clientX, clientY ) ) {
+			if ( items.has( element.id ) && items.get( element.id ).fire( 'drop', item ) ) {
+				return true;
+			}
+		}
 	}
 }

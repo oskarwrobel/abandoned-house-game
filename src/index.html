@@ -11,10 +11,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<div id="container"><div id="inner"></div></div>
+	<div id="root"></div>
 
 	<script>
-		window.appImages = {
+		const appData = window.appData = {};
+
+		appData.images = {
 			sceneHall: '${ require( `./images/scene-hall.svg` ) }',
 			sceneHallWall: '${ require( `./images/scene-hall-wall.svg` ) }',
 			sceneRoomBasement: '${ require( `./images/scene-room-basement.svg` ) }',
@@ -25,7 +27,7 @@
 			flashlight: '${ require( `./images/flashlight.svg` ) }',
 		};
 
-		window.appSounds = {
+		appData.sounds = {
 			doorOpen: '${ require( `./sounds/door-open.wav` ) }',
 			doorLocked: '${ require( `./sounds/door-locked.wav` ) }',
 			doorUnlock: '${ require( `./sounds/door-unlock.wav` ) }',

@@ -3,37 +3,34 @@ body, html {
 	padding: 0;
 	height: 100%;
 	background: #000;
+	touch-action: none;
 }
 
-#container {
+#root {
 	position: relative;
 	width: 100%;
-	padding-top: 56.25%; /* 16:9 Aspect Ratio */
-}
-
-#inner {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	overflow: hidden;
-}
-
-.game,
-.scene-wrapper,
-.storage {
-	width: 100%;
 	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .game {
+	position: relative;
+	overflow: hidden;
+
 	&.grabbing * {
 		cursor: grabbing !important;
 	}
 }
 
-.storage {
+.scene-wrapper,
+.equipment {
+	width: 100%;
+	height: 100%;
+}
+
+.equipment {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -63,22 +60,17 @@ body, html {
 	}
 }
 
+.flashlight {
+	position: absolute;
+	pointer-events: none;
+}
+
 .clickable {
 	cursor: pointer;
 }
 
 .searchable {
 	cursor: zoom-in !important;
-}
-
-.flashlight {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 5000px;
-	height: 5000px;
-	background-image: radial-gradient( circle, transparent 200px, #000 201px );
-	pointer-events: none;
 }
 
 #hall-paint-large {

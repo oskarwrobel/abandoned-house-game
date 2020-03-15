@@ -1,17 +1,18 @@
-export default function createDoor( game, { id, scene, coords, target, keys = [], isLocked } ) {
-	const item = game.scenes.get( scene ).createItem( id, {
-		coords,
-		data: { isLocked },
+export default function createDoor( game, { id, shape, target, keys = [], isLocked } ) {
+	const item = game.items.create( {
+		id,
+		coords: { shape },
+		states: { isLocked },
 		attributes: {
 			classes: [ 'clickable' ]
 		},
 		events: {
 			click: () => {
-				if ( game.storage.isGrabbing ) {
+				if ( game.equipment.isGrabbing ) {
 					return;
 				}
 
-				if ( !item.data.isLocked ) {
+				if ( !item.states.isLocked ) {
 					game.sounds.play( 'doorOpen' );
 					game.scenes.show( target );
 				} else {
@@ -21,8 +22,8 @@ export default function createDoor( game, { id, scene, coords, target, keys = []
 			drop: ( evt, droppedItem ) => {
 				if ( keys.includes( droppedItem.id ) || keys.includes( droppedItem ) ) {
 					game.sounds.play( 'doorUnlock' );
-					game.storage.removeItem( droppedItem );
-					item.data.isLocked = false;
+					game.equipment.removeItem( droppedItem );
+					item.states.isLocked = false;
 
 					evt.return = true;
 				} else {

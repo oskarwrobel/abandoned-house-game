@@ -1,6 +1,6 @@
-import { createSvgElement } from '../utils/createelement';
-import mix from '../utils/mix';
-import EmitterMixin from '../utils/emittermixin';
+import { createSvgElement } from './utils/createelement';
+import mix from './utils/mix';
+import EmitterMixin from './utils/emittermixin';
 
 export default class Scene {
 	/**
@@ -35,6 +35,10 @@ export default class Scene {
 	_render( { id, image } ) {
 		const element = createSvgElement( 'svg' );
 
+		if ( this.game.images.get( image ) ) {
+			image = this.game.images.get( image );
+		}
+
 		element.id = `scene-${ id }`;
 		element.classList.add( 'scene' );
 		element.style.backgroundImage = `url(${ image })`;
@@ -43,8 +47,8 @@ export default class Scene {
 	}
 
 	/**
-	 * @param {String} id
 	 * @param {Object} data
+	 * @param {Object} data.id
 	 * @param {Number} data.top
 	 * @param {Number} data.left
 	 * @param {Number} data.width
@@ -52,15 +56,15 @@ export default class Scene {
 	 * @param {Boolean} [data.takeable=false]
 	 * @param {Boolean} [data.droppable=false]
 	 */
-	createItem( id, data ) {
-		const item = this.game.items.create( id, data );
+	createItem( data ) {
+		const item = this.game.items.create( data );
 
 		this.addItem( item, data.coords );
 
 		return item;
 	}
 
-	addItem( idOrItem, coords ) {
+	addItem( idOrItem, coords = {} ) {
 		const item = typeof idOrItem === 'string' ? this.game.items.get( idOrItem ) : idOrItem;
 
 		item.element.remove();

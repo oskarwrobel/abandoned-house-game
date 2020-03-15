@@ -1,7 +1,5 @@
 import Scene from './scene';
-import { createElement } from '../utils/createelement';
-
-/* global appImages */
+import { createElement } from './utils/createelement';
 
 export default class Scenes {
 	/**
@@ -31,12 +29,11 @@ export default class Scenes {
 	}
 
 	/**
-	 * @param {String} id
 	 * @param {Object} data
+	 * @param {String} data.id
 	 * @param {String} data.image
-	 * @param {Scene|String} [data.back]
 	 */
-	create( id, { image, back } ) {
+	create( { id, image } ) {
 		if ( this._idToScene.has( id ) ) {
 			throw new Error( 'Cannot add the same scene more than once.' );
 		}
@@ -45,36 +42,12 @@ export default class Scenes {
 
 		this._idToScene.set( id, scene );
 
-		if ( back ) {
-			scene.createItem( 'back-' + id, {
-				attributes: {
-					image: appImages.backButton,
-					classes: [ 'clickable' ]
-				},
-				coords: {
-					top: 625,
-					left: 1100,
-					points: [ [ 0, 0 ], [ 130, 0 ], [ 130, 50 ], [ 0, 50 ] ]
-				},
-				events: {
-					click: () => {
-						if ( this.game.storage.isGrabbing ) {
-							return;
-						}
-
-						this.game.sounds.play( 'button' );
-						this.show( back );
-					}
-				}
-			} );
-		}
-
 		return scene;
 	}
 
-	show( id ) {
-		if ( !this._idToScene.has( id ) ) {
-			throw new Error( 'Scene is not defined.' );
+	show( idOrScene ) {
+		if ( typeof idOrScene === 'string' ) {
+			idOrScene = this.get( idOrScene );
 		}
 
 		if ( this.current ) {
@@ -82,12 +55,10 @@ export default class Scenes {
 			this.current.element.remove();
 		}
 
-		const scene = this._idToScene.get( id );
+		this.element.appendChild( idOrScene.element );
+		this.current = idOrScene;
 
-		this.element.appendChild( scene.element );
-		this.current = scene;
-
-		scene.fire( 'enter' );
+		idOrScene.fire( 'enter' );
 	}
 
 	get( id ) {

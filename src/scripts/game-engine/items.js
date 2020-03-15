@@ -18,15 +18,14 @@ export default class Items {
 	}
 
 	/**
-	 * @param {String} id
 	 * @param {Object} data
 	 */
-	create( id, { attributes, coords, events, data } ) {
+	create( { id, attributes, coords, events, states } ) {
 		if ( this._idToItem.has( id ) ) {
 			throw new Error( 'Cannot add the same item more than once.' );
 		}
 
-		const item = new Item( this.game, { id, attributes, coords, data, events } );
+		const item = new Item( this.game, { id, attributes, coords, events, states } );
 
 		this._idToItem.set( id, item );
 
