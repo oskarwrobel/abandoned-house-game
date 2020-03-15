@@ -1,19 +1,18 @@
 {
-  "name": "game-creator",
+  "name": "abandoned-house-game",
   "version": "0.0.1",
-  "description": "Game creator utils.",
+  "description": "Abandoned House Game.",
   "scripts": {
     "lint": "eslint --quiet '**/*.js'",
-    "build": "webpack --config dev/webpack.config.js --mode development",
-    "build:production": "webpack --config dev/webpack.config.js --mode production --optimize-minimize --env.analytics=UA-11153361-X",
-    "serve": "http-server ./dist/",
-    "deploy": "npm run lint && node ./dev/deploy"
+    "build": "webpack --mode development",
+    "build:production": "webpack --mode production --optimize-minimize",
+    "serve": "http-server ./dist/"
   },
   "author": "Oskar Wrobel",
   "dependencies": {},
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^3.2.0",
+    "css-loader": "^3.4.2",
     "eslint": "^6.5.1",
     "eslint-config-ckeditor5": "^2.0.0",
     "file-loader": "^4.2.0",
@@ -24,8 +23,9 @@
     "imports-loader": "^0.8.0",
     "lint-staged": "^9.4.2",
     "mini-css-extract-plugin": "^0.8.0",
-    "node-sass": "^4.12.0",
-    "sass-loader": "^8.0.0",
+    "postcss-loader": "^3.0.0",
+    "postcss-nested": "^4.2.1",
+    "style-loader": "^1.1.3",
     "webpack": "^4.41.1",
     "webpack-cli": "^3.3.9"
   },
@@ -35,8 +35,7 @@
     ]
   },
   "eslintIgnore": [
-    "dist/**",
-    "src/scripts/analytics.js"
+    "dist/**"
   ],
   "husky": {
     "hooks": {
