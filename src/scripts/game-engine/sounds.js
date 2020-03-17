@@ -4,10 +4,15 @@ const audioContext = new AudioContextConstructor();
 export default class Sounds {
 	constructor( initialData ) {
 		this._sounds = new Map();
+		this._loading = [];
 
 		for ( const name of Object.keys( initialData ) ) {
 			this.add( name, initialData[ name ] );
 		}
+	}
+
+	preload() {
+		return Promise.all( this._loading );
 	}
 
 	add( name, path ) {
@@ -15,7 +20,10 @@ export default class Sounds {
 			throw new Error( 'Sound is already defined.' );
 		}
 
-		loadSound( path ).then( buffer => this._sounds.set( name, buffer ) );
+		const loadingPromise = loadSound( path );
+
+		this._loading.push( loadingPromise );
+		loadingPromise.then( buffer => this._sounds.set( name, buffer ) );
 	}
 
 	play( name ) {
