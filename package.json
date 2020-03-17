@@ -4,8 +4,9 @@
   "description": "Abandoned House Game.",
   "scripts": {
     "lint": "eslint --quiet '**/*.js'",
-    "build": "webpack --mode development",
-    "build:production": "webpack --mode production --optimize-minimize",
+    "clean": "rm -rf ./dist",
+    "build": "npm run clean && webpack --mode development",
+    "build:production": "npm run clean && webpack --mode production --optimize-minimize",
     "serve": "http-server ./dist/"
   },
   "author": "Oskar Wrobel",
@@ -25,7 +26,6 @@
     "mini-css-extract-plugin": "^0.8.0",
     "postcss-loader": "^3.0.0",
     "postcss-nested": "^4.2.1",
-    "style-loader": "^1.1.3",
     "webpack": "^4.41.1",
     "webpack-cli": "^3.3.9"
   },
@@ -35,7 +35,8 @@
     ]
   },
   "eslintIgnore": [
-    "dist/**"
+    "dist/**",
+    "src/scripts/analytics.js"
   ],
   "husky": {
     "hooks": {

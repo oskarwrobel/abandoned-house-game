@@ -3,16 +3,22 @@
 /* eslint-env node */
 
 const path = require( 'path' );
-const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
+const { DefinePlugin } = require( 'webpack' );
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 
-module.exports = () => {
+module.exports = ( env = {} ) => {
+	const projectDir = path.dirname( __filename );
+
 	const entry = [
-		path.join( process.cwd(), 'src', 'scripts', 'app.js' )
+		path.join( projectDir, 'src', 'scripts', 'app.js' )
 	];
 
-	const webpackConfig = {
+	if ( env.analytics ) {
+		entry.push( path.join( projectDir, 'src', 'scripts', 'analytics.js' ) );
+	}
+
+	return {
 		entry,
 
 		output: {
@@ -26,7 +32,7 @@ module.exports = () => {
 				{
 					test: /\.css$/,
 					use: [
-						'style-loader',
+						MiniCssExtractPlugin.loader,
 						{
 							loader: 'css-loader',
 							options: {
@@ -61,15 +67,16 @@ module.exports = () => {
 		},
 
 		plugins: [
-			new CleanWebpackPlugin(),
 			new HtmlWebpackPlugin( {
-				template: path.join( process.cwd(), 'src', 'index.html' )
+				template: path.join( projectDir, 'src', 'index.html' ),
+				filename: 'abandoned-house-game.html'
 			} ),
 			new MiniCssExtractPlugin( {
 				filename: '[name].[contenthash].css'
+			} ),
+			new DefinePlugin( {
+				ANALYTICS: JSON.stringify( env.analytics )
 			} )
 		]
 	};
-
-	return webpackConfig;
 };
