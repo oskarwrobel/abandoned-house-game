@@ -10,8 +10,6 @@ import RoomBasementClosetClosedScene from "./game/scenes/room-basement/RoomBasem
 import RoomBasementClosetClosedUnlockKeyScene from "./game/scenes/room-basement/RoomBasementClosetClosedUnlockCode";
 import LightRoomScene from "./game/scenes/LightRoom";
 
-import Flashlight from "./game/items/Flashlight";
-
 import { showLoader, hideLoader } from "./loader/loader";
 
 import "./main.css";
