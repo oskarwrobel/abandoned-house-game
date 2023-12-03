@@ -2,8 +2,8 @@ import Game from "./game-engine/game";
 import Flashlight from "./game-items/flashlight";
 import createDoor from "./game-items/createdoor";
 import createBackButton from "./game-items/createbackbutton";
-import assetsImages from "./images";
-import assetsSounds from "./sounds";
+import assetsImages from "./images-assets";
+import assetsSounds from "./sounds-assets";
 
 import "../styles/app.css";
 import "../styles/loader.css";
