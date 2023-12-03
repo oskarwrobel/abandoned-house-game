@@ -87,7 +87,26 @@ export default class Equipment {
    * @param {Item} item
    */
   _attachDragAndDrop(item) {
-    let previousLeft;
+    let leftPositionInEquipment;
+    let topGrbShift;
+    let leftGrabShift;
+
+    const dragItem = (evt) => {
+      evt.preventDefault();
+      evt.stopPropagation();
+
+      leftPositionInEquipment = item.left;
+      topGrbShift = evt.clientY - evt.target.getBoundingClientRect().top;
+      leftGrabShift = evt.clientX - evt.target.getBoundingClientRect().left;
+
+      this.isGrabbing = true;
+      item.element.classList.add("dragging");
+      this.game.element.classList.add("grabbing");
+      document.addEventListener("mousemove", moveItem);
+      document.addEventListener("click", dropItem);
+      document.addEventListener("touchmove", moveItem);
+      document.addEventListener("touchend", dropItem);
+    };
 
     const moveItem = (evt) => {
       evt.preventDefault();
@@ -106,8 +125,8 @@ export default class Equipment {
 
       const gameBounds = this.game.element.getBoundingClientRect();
 
-      item.top = (clientY - gameBounds.top) / this.game.sizeFactor;
-      item.left = (clientX - gameBounds.left) / this.game.sizeFactor;
+      item.top = (clientY - gameBounds.top - topGrbShift) / this.game.sizeFactor;
+      item.left = (clientX - gameBounds.left - leftGrabShift) / this.game.sizeFactor;
     };
 
     const dropItem = (evt) => {
@@ -135,25 +154,10 @@ export default class Equipment {
 
       if (!this._checkDropTarget(item, clientX, clientY)) {
         item.top = paddingTop;
-        item.left = previousLeft;
+        item.left = leftPositionInEquipment;
       }
 
-      previousLeft = null;
-    };
-
-    const dragItem = (evt) => {
-      evt.preventDefault();
-      evt.stopPropagation();
-
-      previousLeft = item.left;
-
-      this.isGrabbing = true;
-      item.element.classList.add("dragging");
-      this.game.element.classList.add("grabbing");
-      document.addEventListener("mousemove", moveItem);
-      document.addEventListener("click", dropItem);
-      document.addEventListener("touchmove", moveItem);
-      document.addEventListener("touchend", dropItem);
+      leftPositionInEquipment = null;
     };
 
     item.element.addEventListener("click", dragItem);
