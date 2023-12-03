@@ -1,6 +1,7 @@
 import sceneHall from "./scene-hall.svg?url";
 import sceneHallWall from "./scene-hall-wall.svg?url";
 import sceneRoomBasement from "./scene-room-basement.svg?url";
+import sceneRoomBasementCloset from "./scene-room-basement-closet.svg?url";
 import sceneRoomLight from "./scene-room-light.svg?url";
 import hallPaint from "./hall-paint.svg?url";
 import hallLeftDoor from "./hall-left-door.svg?url";
@@ -15,6 +16,7 @@ export default {
   sceneHall,
   sceneHallWall,
   sceneRoomBasement,
+  sceneRoomBasementCloset,
   sceneRoomLight,
   hallPaint,
   hallLeftDoor,

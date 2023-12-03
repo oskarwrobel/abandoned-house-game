@@ -15,6 +15,7 @@ export default class LightRoom extends Scene {
     lightRoomScene.addItem(
       BackButton.create(game, {
         id: "room-light-back",
+        scene: lightRoomScene,
         backScene: game.scenes.get("hall"),
       }),
       BackButton.defaultPosition,

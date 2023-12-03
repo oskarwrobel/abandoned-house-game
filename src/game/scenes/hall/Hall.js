@@ -19,7 +19,7 @@ export default class Hall extends Scene {
       id: "hall-paint",
       attributes: {
         image: "hallPaint",
-        classes: ["searchable"],
+        classes: ["clickable"],
       },
       coords: {
         top: 225,
@@ -101,7 +101,7 @@ export default class Hall extends Scene {
           [127, 0],
           [127, 337],
         ],
-        target: "room-with-basement",
+        target: "room-basement",
       }),
       {
         top: 286,

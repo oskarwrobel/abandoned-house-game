@@ -18,6 +18,7 @@ export default class HallPaint extends Scene {
     hallPaintScene.addItem(
       BackButton.create(game, {
         id: "hall-paint-back",
+        scene: hallPaintScene,
         backScene: scenes.get("hall"),
       }),
       BackButton.defaultPosition,

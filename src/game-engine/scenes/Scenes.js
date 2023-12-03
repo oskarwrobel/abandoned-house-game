@@ -26,6 +26,12 @@ export default class Scenes {
      * @type {Map<String,Scene>}
      */
     this._idToScene = new Map();
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        this.current?.fire("Esc");
+      }
+    });
   }
 
   /**
@@ -60,14 +66,11 @@ export default class Scenes {
     }
 
     if (this.current) {
-      this.current.fire("exit");
       this.current.element.remove();
     }
 
     this.element.appendChild(idOrScene.element);
     this.current = idOrScene;
-
-    idOrScene.fire("enter");
   }
 
   get(id) {

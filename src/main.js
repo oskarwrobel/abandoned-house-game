@@ -4,7 +4,8 @@ import assetsSounds from "./game/assets/sounds";
 
 import HallScene from "./game/scenes/hall/Hall";
 import HallPaintScene from "./game/scenes/hall/HallPaint";
-import RoomWithBasementScene from "./game/scenes/RoomWithBasement";
+import RoomBasementScene from "./game/scenes/room-basement/RoomBasement";
+import RoomBasementClosetScene from "./game/scenes/room-basement/RoomBasementCloset";
 import LightRoomScene from "./game/scenes/LightRoom";
 
 import Flashlight from "./game/items/Flashlight";
@@ -28,7 +29,8 @@ Promise.all([game.sounds.preload(), game.images.preload()]).then(() => {
   // Scenes
   HallScene.create(game);
   HallPaintScene.create(game);
-  RoomWithBasementScene.create(game);
+  RoomBasementScene.create(game);
+  RoomBasementClosetScene.create(game);
   LightRoomScene.create(game);
 
   // Set initial scene.

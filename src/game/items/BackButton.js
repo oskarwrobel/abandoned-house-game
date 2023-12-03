@@ -1,7 +1,7 @@
 import Item from "../../game-engine/items/Item";
 
 export default class Door extends Item {
-  static create(game, { id, backScene }) {
+  static create(game, { id, scene, backScene }) {
     const backButtonItem = new this(game, {
       id,
       attributes: {
@@ -26,6 +26,11 @@ export default class Door extends Item {
           game.scenes.show(backScene);
         },
       },
+    });
+
+    scene.on("Esc", () => {
+      game.sounds.play("button");
+      game.scenes.show(backScene);
     });
 
     return game.items.add(backButtonItem);
