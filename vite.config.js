@@ -9,7 +9,7 @@ import svgo from "vite-plugin-svgo";
 export default defineConfig({
   plugins: [
     createHtmlPlugin({
-      entry: "/src/scripts/app.js",
+      entry: "/src/main.js",
       template: "public/index.html",
     }),
     svgo({

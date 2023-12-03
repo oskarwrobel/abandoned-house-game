@@ -1,0 +1,4 @@
+.flashlight {
+  position: absolute;
+  pointer-events: none;
+}

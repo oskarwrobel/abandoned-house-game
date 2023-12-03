@@ -21,7 +21,7 @@
     }],
 
     // ## Possible errors
-    "no-console": "off",
+    "no-console": ["error"],
     "no-constant-condition": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/no-explicit-any": "off"
