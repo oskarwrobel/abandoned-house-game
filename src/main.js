@@ -40,10 +40,6 @@ Promise.all([game.sounds.preload(), game.images.preload()]).then(() => {
   // Set initial scene.
   game.scenes.show("hall");
 
-  // Adds flashlight to the storage (just to test it).
-  Flashlight.create(game);
-  game.equipment.addItem("flashlight");
-
   // Adjust game size each time screen properties have changed.
   window.addEventListener("resize", () => game.update());
   window.addEventListener("orientationchange", () => game.update());

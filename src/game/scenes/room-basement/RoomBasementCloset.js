@@ -1,4 +1,5 @@
 import Scene from "../../../game-engine/scenes/Scene";
+import Flashlight from "../../items/Flashlight";
 
 export default class RoomBasementCloset extends Scene {
   /**
@@ -41,6 +42,39 @@ export default class RoomBasementCloset extends Scene {
       },
       events: {
         click: () => game.sounds.play("rubberDuck"),
+      },
+    });
+
+    scene.createItem({
+      id: "flashlight-big",
+      attributes: {
+        classes: ["clickable"],
+        image: "flashlightBig",
+      },
+      coords: {
+        top: 570,
+        left: 640,
+        shape: [
+          [20, 0],
+          [78, 12],
+          [87, 27],
+          [276, 44],
+          [287, 56],
+          [283, 93],
+          [270, 100],
+          [81, 82],
+          [70, 95],
+          [10, 96],
+          [0, 47],
+        ],
+      },
+      events: {
+        click: () => {
+          game.sounds.play("button");
+          scene.removeItem("flashlight-big");
+          Flashlight.create(game);
+          game.equipment.addItem("flashlight");
+        },
       },
     });
 

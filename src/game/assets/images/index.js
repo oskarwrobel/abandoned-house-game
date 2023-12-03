@@ -13,6 +13,7 @@ import hallRightDoorOpen from "./hall-right-door-open.svg?url";
 import key from "./key.svg?url";
 import backButton from "./back-button.svg?url";
 import flashlight from "./flashlight.svg?url";
+import flashlightBig from "./flashlight-big.svg?url";
 
 import digit0 from "./digit0.svg?url";
 import digit1 from "./digit1.svg?url";
@@ -41,6 +42,7 @@ export default {
   key,
   backButton,
   flashlight,
+  flashlightBig,
 
   digit0,
   digit1,
