@@ -122,6 +122,14 @@ export default class Item {
     return this._left;
   }
 
+  get right() {
+    return this.left + this.width;
+  }
+
+  get bottom() {
+    return this.top + this.height;
+  }
+
   set shape(value) {
     this._shape = value;
     this.element.querySelector("polygon").setAttribute("points", this._shapeToPoints());

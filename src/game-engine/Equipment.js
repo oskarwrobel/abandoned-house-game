@@ -1,7 +1,9 @@
 import { createSvgElement } from "./utils/createelement";
 
-const paddingTop = 12;
-const paddingLeft = 25;
+import "./Equipment.css";
+
+const paddingV = 12;
+const paddingH = 25;
 
 export default class Equipment {
   /**
@@ -39,8 +41,8 @@ export default class Equipment {
   addItem(idOrItem, { droppable = false } = {}) {
     const item = typeof idOrItem === "string" ? this.game.items.get(idOrItem) : idOrItem;
 
-    item.top = paddingTop;
-    item.left = this._getAvailableLeft() + paddingLeft;
+    item.top = paddingV;
+    item.left = (this._lastItem?.right ?? 0) + paddingH;
 
     this._items.add(item);
     this.element.appendChild(item.element);
@@ -76,10 +78,10 @@ export default class Equipment {
 
   /**
    * @private
-   * @returns {Number}
+   * @returns {Item|undefined}
    */
-  _getAvailableLeft() {
-    return Array.from(this._items).reduce((result, item) => result + item.width + paddingLeft, 0);
+  get _lastItem() {
+    return Array.from(this._items).pop();
   }
 
   /**
@@ -153,7 +155,7 @@ export default class Equipment {
       document.removeEventListener("touchend", dropItem);
 
       if (!this._checkDropTarget(item, clientX, clientY)) {
-        item.top = paddingTop;
+        item.top = paddingV;
         item.left = leftPositionInEquipment;
       }
 
