@@ -42,6 +42,7 @@ export default class Items {
     }
 
     this._idToItem.set(item.id, item);
+    return item;
   }
 
   get(id) {

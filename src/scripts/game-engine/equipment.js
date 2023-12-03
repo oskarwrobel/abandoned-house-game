@@ -90,6 +90,8 @@ export default class Equipment {
     const moveItem = (evt) => {
       evt.preventDefault();
 
+      console.log(this._items);
+
       let clientX, clientY;
 
       if (evt.touches) {
