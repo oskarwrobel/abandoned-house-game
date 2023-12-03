@@ -1,5 +1,5 @@
 import Scene from "../../../game-engine/scenes/Scene";
-import BackButton from "../../items/BackButton";
+import { wait } from "../../../game-engine/utils";
 
 export default class RoomBasement extends Scene {
   /**
@@ -7,12 +7,12 @@ export default class RoomBasement extends Scene {
    * @returns {Scene}
    */
   static create(game) {
-    const roomBasementScene = new this(game, {
+    const scene = new this(game, {
       id: "room-basement",
       image: "sceneRoomBasement",
     });
 
-    roomBasementScene.createItem({
+    const closet = scene.createItem({
       id: "room-basement-closet",
       attributes: {
         classes: ["clickable"],
@@ -30,22 +30,27 @@ export default class RoomBasement extends Scene {
         ],
       },
       events: {
-        click: () => {
-          game.sounds.play("button");
-          game.scenes.show("room-basement-closet");
+        click: async () => {
+          if (closet.states.opening) {
+            return;
+          }
+
+          if (closet.states.unlocked) {
+            closet.states.opening = true;
+            game.sounds.play("closetDoors");
+            await wait(500);
+            game.scenes.show("room-basement-closet");
+            closet.states.opening = false;
+          } else {
+            game.sounds.play("button");
+            game.scenes.show("room-basement-closet-closed");
+          }
         },
       },
     });
 
-    roomBasementScene.addItem(
-      BackButton.create(game, {
-        id: "room-with-basement-back",
-        scene: roomBasementScene,
-        backScene: game.scenes.get("hall"),
-      }),
-      BackButton.defaultPosition,
-    );
+    scene.addBackButton("hall");
 
-    return game.scenes.add(roomBasementScene);
+    return game.scenes.add(scene);
   }
 }

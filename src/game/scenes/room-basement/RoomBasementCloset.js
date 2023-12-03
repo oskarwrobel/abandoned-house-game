@@ -1,5 +1,4 @@
 import Scene from "../../../game-engine/scenes/Scene";
-import BackButton from "../../items/BackButton";
 
 export default class RoomBasementCloset extends Scene {
   /**
@@ -7,20 +6,46 @@ export default class RoomBasementCloset extends Scene {
    * @returns {Scene}
    */
   static create(game) {
-    const roomBasementScene = new this(game, {
+    const scene = new this(game, {
       id: "room-basement-closet",
       image: "sceneRoomBasementCloset",
     });
 
-    roomBasementScene.addItem(
-      BackButton.create(game, {
-        id: "room-basement-closet-back",
-        scene: roomBasementScene,
-        backScene: game.scenes.get("room-basement"),
-      }),
-      BackButton.defaultPosition,
-    );
+    scene.createItem({
+      id: "rubber-duck",
+      attributes: {
+        classes: ["clickable"],
+      },
+      coords: {
+        top: 288,
+        left: 594,
+        shape: [
+          [17, 9],
+          [33, 12],
+          [52, 0],
+          [72, 7],
+          [79, 26],
+          [72, 47],
+          [101, 50],
+          [116, 45],
+          [121, 53],
+          [112, 78],
+          [78, 106],
+          [26, 102],
+          [6, 90],
+          [0, 71],
+          [11, 45],
+          [26, 37],
+          [12, 22],
+        ],
+      },
+      events: {
+        click: () => game.sounds.play("rubberDuck"),
+      },
+    });
 
-    return game.scenes.add(roomBasementScene);
+    scene.addBackButton("room-basement");
+
+    return game.scenes.add(scene);
   }
 }

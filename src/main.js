@@ -6,6 +6,8 @@ import HallScene from "./game/scenes/hall/Hall";
 import HallPaintScene from "./game/scenes/hall/HallPaint";
 import RoomBasementScene from "./game/scenes/room-basement/RoomBasement";
 import RoomBasementClosetScene from "./game/scenes/room-basement/RoomBasementCloset";
+import RoomBasementClosetClosedScene from "./game/scenes/room-basement/RoomBasementClosetClosed";
+import RoomBasementClosetClosedUnlockKeyScene from "./game/scenes/room-basement/RoomBasementClosetClosedUnlockCode";
 import LightRoomScene from "./game/scenes/LightRoom";
 
 import Flashlight from "./game/items/Flashlight";
@@ -31,6 +33,8 @@ Promise.all([game.sounds.preload(), game.images.preload()]).then(() => {
   HallPaintScene.create(game);
   RoomBasementScene.create(game);
   RoomBasementClosetScene.create(game);
+  RoomBasementClosetClosedScene.create(game);
+  RoomBasementClosetClosedUnlockKeyScene.create(game);
   LightRoomScene.create(game);
 
   // Set initial scene.

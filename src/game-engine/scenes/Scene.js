@@ -1,6 +1,7 @@
 import { createSvgElement } from "../utils/createelement";
 import mix from "../utils/mix";
 import EmitterMixin from "../utils/EmitterMixin";
+import BackButton from "../../game/items/BackButton";
 
 export default class Scene {
   /**
@@ -79,6 +80,17 @@ export default class Scene {
   removeItem(idOrItem) {
     const item = typeof idOrItem === "string" ? this.game.items.get(idOrItem) : idOrItem;
     this.game.items.remove(item.id);
+  }
+
+  addBackButton(backScene) {
+    this.addItem(
+      BackButton.create(this.game, {
+        id: `${this.id}-back`,
+        scene: this,
+        backScene: this.game.scenes.get(backScene),
+      }),
+      BackButton.defaultPosition,
+    );
   }
 }
 

@@ -1,5 +1,4 @@
 import Scene from "../../game-engine/scenes/Scene";
-import BackButton from "../items/BackButton";
 
 export default class LightRoom extends Scene {
   /**
@@ -7,20 +6,13 @@ export default class LightRoom extends Scene {
    * @returns {Scene}
    */
   static create(game) {
-    const lightRoomScene = new this(game, {
+    const scene = new this(game, {
       id: "room-light",
       image: "sceneRoomLight",
     });
 
-    lightRoomScene.addItem(
-      BackButton.create(game, {
-        id: "room-light-back",
-        scene: lightRoomScene,
-        backScene: game.scenes.get("hall"),
-      }),
-      BackButton.defaultPosition,
-    );
+    scene.addBackButton("hall");
 
-    return game.scenes.add(lightRoomScene);
+    return game.scenes.add(scene);
   }
 }

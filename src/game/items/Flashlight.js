@@ -104,7 +104,7 @@ export default class Flashlight extends Item {
 
   /**
    * @param game {Game}
-   * @param data {Object}
+   * @param data {Object|undefined}
    */
   static create(game, data) {
     const item = new this(game, data);

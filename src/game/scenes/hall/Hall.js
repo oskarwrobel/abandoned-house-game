@@ -10,12 +10,12 @@ export default class Hall extends Scene {
   static create(game) {
     const { scenes, equipment, sounds } = game;
 
-    const hallScene = new this(game, {
+    const scene = new this(game, {
       id: "hall",
       image: "sceneHall",
     });
 
-    hallScene.createItem({
+    scene.createItem({
       id: "hall-paint",
       attributes: {
         image: "hallPaint",
@@ -43,7 +43,7 @@ export default class Hall extends Scene {
       },
     });
 
-    hallScene.createItem({
+    scene.createItem({
       id: "door-1",
       attributes: {
         image: "hallLeftDoor",
@@ -59,7 +59,7 @@ export default class Hall extends Scene {
         ],
       },
     });
-    hallScene.addItem(
+    scene.addItem(
       Door.create(game, {
         id: "door-1-inside",
         shape: [
@@ -76,7 +76,7 @@ export default class Hall extends Scene {
       },
     );
 
-    hallScene.createItem({
+    scene.createItem({
       id: "door-2",
       attributes: {
         image: "hallLeftDoorOpen",
@@ -92,7 +92,7 @@ export default class Hall extends Scene {
         ],
       },
     });
-    hallScene.addItem(
+    scene.addItem(
       Door.create(game, {
         id: "door-2-inside",
         shape: [
@@ -109,7 +109,7 @@ export default class Hall extends Scene {
       },
     );
 
-    hallScene.createItem({
+    scene.createItem({
       id: "door-3",
       attributes: {
         image: "hallRightDoor",
@@ -125,7 +125,7 @@ export default class Hall extends Scene {
         ],
       },
     });
-    hallScene.addItem(
+    scene.addItem(
       Door.create(game, {
         id: "door-3-inside",
         shape: [
@@ -142,26 +142,26 @@ export default class Hall extends Scene {
       },
     );
 
-    hallScene.createItem({
+    scene.createItem({
       ...door4baseProps,
       attributes: { image: "hallRightDoor" },
     });
-    hallScene.addItem(
+    scene.addItem(
       Door.create(game, {
         ...door4insideBaseProps,
         isLocked: true,
         keys: ["hall-key"],
         events: {
           unlock: async () => {
-            hallScene.removeItem("door-4-inside");
+            scene.removeItem("door-4-inside");
             await wait(2000);
 
-            hallScene.removeItem("door-4");
-            hallScene.createItem({
+            scene.removeItem("door-4");
+            scene.createItem({
               ...door4baseProps,
               attributes: { image: "hallRightDoorOpen" },
             });
-            hallScene.addItem(
+            scene.addItem(
               Door.create(game, {
                 ...door4insideBaseProps,
                 target: "room-light",
@@ -174,7 +174,7 @@ export default class Hall extends Scene {
       door4insidePosition,
     );
 
-    return game.scenes.add(hallScene);
+    return game.scenes.add(scene);
   }
 }
 

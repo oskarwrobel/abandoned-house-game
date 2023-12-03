@@ -1,5 +1,4 @@
 import Scene from "../../../game-engine/scenes/Scene";
-import BackButton from "../../items/BackButton";
 
 import "./HallPaint.css";
 export default class HallPaint extends Scene {
@@ -8,23 +7,16 @@ export default class HallPaint extends Scene {
    * @returns {Scene}
    */
   static create(game) {
-    const { scenes, equipment, sounds, items } = game;
+    const { equipment, sounds, items } = game;
 
-    const hallPaintScene = new this(game, {
+    const scene = new this(game, {
       id: "hall-paint",
       image: "sceneHallWall",
     });
 
-    hallPaintScene.addItem(
-      BackButton.create(game, {
-        id: "hall-paint-back",
-        scene: hallPaintScene,
-        backScene: scenes.get("hall"),
-      }),
-      BackButton.defaultPosition,
-    );
+    scene.addBackButton("hall");
 
-    hallPaintScene.createItem({
+    scene.createItem({
       id: "hall-key",
       attributes: {
         image: "key",
@@ -61,7 +53,7 @@ export default class HallPaint extends Scene {
       },
     });
 
-    hallPaintScene.createItem({
+    scene.createItem({
       id: "hall-paint-large",
       attributes: {
         image: "hallPaint",
@@ -99,6 +91,6 @@ export default class HallPaint extends Scene {
       },
     });
 
-    return game.scenes.add(hallPaintScene);
+    return game.scenes.add(scene);
   }
 }
