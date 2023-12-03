@@ -86,11 +86,11 @@ export default class HallPaint extends Scene {
           const paint = items.get("hall-paint");
 
           if (paintLarge.angle) {
-            paintLarge.rotate(0, 220, 10);
-            paint.rotate(0, 25, 3);
+            paintLarge.rotate(0, 275, 12);
+            paint.rotate(0, 31, 4);
           } else {
-            paintLarge.rotate(30, 220, 10);
-            paint.rotate(18, 25, 5);
+            paintLarge.rotate(30, 275, 12);
+            paint.rotate(18, 31, 4);
           }
 
           sounds.play("swipe");
