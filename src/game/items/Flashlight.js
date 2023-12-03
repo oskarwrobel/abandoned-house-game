@@ -3,7 +3,7 @@ import { createElement } from "../../game-engine/utils/createelement";
 
 import "./Flashlight.css";
 
-const lightMaskSize = 2600;
+const lightMaskSize = 3250;
 
 export default class Flashlight extends Item {
   /**
@@ -17,13 +17,14 @@ export default class Flashlight extends Item {
         {
           attributes: {
             image: "flashlight",
+            classes: ["clickable"],
           },
           coords: {
             shape: [
               [0, 0],
-              [20, 0],
-              [20, 49],
-              [0, 49],
+              [25, 0],
+              [25, 61],
+              [0, 61],
             ],
           },
           events: {

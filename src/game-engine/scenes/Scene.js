@@ -75,6 +75,11 @@ export default class Scene {
 
     this.element.appendChild(item.element);
   }
+
+  removeItem(idOrItem) {
+    const item = typeof idOrItem === "string" ? this.game.items.get(idOrItem) : idOrItem;
+    this.game.items.remove(item.id);
+  }
 }
 
 mix(Scene, EmitterMixin);

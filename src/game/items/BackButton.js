@@ -33,8 +33,8 @@ export default class Door extends Item {
 
   static get defaultPosition() {
     return {
-      top: 625,
-      left: 1100,
+      top: 781,
+      left: 1375,
     };
   }
 }

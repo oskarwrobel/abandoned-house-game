@@ -16,7 +16,7 @@ import "./game/game.css";
 
 // Creates a game.
 const game = new Game({
-  resolution: "1280x720",
+  resolution: "1600x900",
   images: assetsImages,
   sounds: assetsSounds,
 });

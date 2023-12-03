@@ -1,5 +1,6 @@
 import Scene from "../../../game-engine/scenes/Scene";
 import Door from "../../items/Door";
+import { wait } from "../../../game-engine/utils";
 
 export default class Hall extends Scene {
   /**
@@ -21,13 +22,13 @@ export default class Hall extends Scene {
         classes: ["searchable"],
       },
       coords: {
-        top: 180,
-        left: 579,
+        top: 225,
+        left: 723,
         shape: [
           [0, 0],
-          [123, 0],
-          [123, 160],
-          [0, 160],
+          [153, 0],
+          [153, 200],
+          [0, 200],
         ],
       },
       events: {
@@ -42,77 +43,164 @@ export default class Hall extends Scene {
       },
     });
 
+    hallScene.createItem({
+      id: "door-1",
+      attributes: {
+        image: "hallLeftDoor",
+      },
+      coords: {
+        top: 278,
+        left: 103,
+        shape: [
+          [0, 585],
+          [0, 0],
+          [217, 0],
+          [217, 475],
+        ],
+      },
+    });
     hallScene.addItem(
       Door.create(game, {
-        id: "door-a",
+        id: "door-1-inside",
         shape: [
-          [0, 432],
+          [0, 538],
           [0, 0],
-          [141, 0],
-          [141, 373],
+          [172, 0],
+          [172, 458],
         ],
         isLocked: true,
       }),
       {
-        top: 228,
-        left: 82,
+        top: 287,
+        left: 103,
       },
     );
 
+    hallScene.createItem({
+      id: "door-2",
+      attributes: {
+        image: "hallLeftDoorOpen",
+      },
+      coords: {
+        top: 279,
+        left: 425,
+        shape: [
+          [0, 432],
+          [0, 0],
+          [160, 0],
+          [160, 350],
+        ],
+      },
+    });
     hallScene.addItem(
       Door.create(game, {
-        id: "door-b",
+        id: "door-2-inside",
         shape: [
-          [0, 316],
+          [0, 396],
           [0, 0],
-          [104, 0],
-          [104, 272],
+          [127, 0],
+          [127, 337],
         ],
         target: "room-with-basement",
       }),
       {
-        top: 226,
-        left: 340,
+        top: 286,
+        left: 425,
       },
     );
 
+    hallScene.createItem({
+      id: "door-3",
+      attributes: {
+        image: "hallRightDoor",
+      },
+      coords: {
+        top: 279,
+        left: 1023,
+        shape: [
+          [0, 350],
+          [0, 0],
+          [160, 0],
+          [160, 432],
+        ],
+      },
+    });
     hallScene.addItem(
       Door.create(game, {
-        id: "door-c",
+        id: "door-3-inside",
         shape: [
-          [0, 272],
+          [0, 337],
           [0, 0],
-          [102, 0],
-          [102, 316],
+          [127, 0],
+          [127, 396],
         ],
         isLocked: true,
       }),
       {
-        top: 226,
-        left: 840,
+        top: 286,
+        left: 1056,
       },
     );
 
+    hallScene.createItem({
+      ...door4baseProps,
+      attributes: { image: "hallRightDoor" },
+    });
     hallScene.addItem(
       Door.create(game, {
-        id: "door-d",
-        scene: hallScene,
-        shape: [
-          [0, 371],
-          [0, 0],
-          [140, 0],
-          [140, 432],
-        ],
+        ...door4insideBaseProps,
         isLocked: true,
-        target: "room-light",
         keys: ["hall-key"],
+        events: {
+          unlock: async () => {
+            hallScene.removeItem("door-4-inside");
+            await wait(2000);
+
+            hallScene.removeItem("door-4");
+            hallScene.createItem({
+              ...door4baseProps,
+              attributes: { image: "hallRightDoorOpen" },
+            });
+            hallScene.addItem(
+              Door.create(game, {
+                ...door4insideBaseProps,
+                target: "room-light",
+              }),
+              door4insidePosition,
+            );
+          },
+        },
       }),
-      {
-        top: 228,
-        left: 1060,
-      },
+      door4insidePosition,
     );
 
     return game.scenes.add(hallScene);
   }
 }
+
+const door4baseProps = {
+  id: "door-4",
+  coords: {
+    top: 277,
+    left: 1284,
+    shape: [
+      [0, 475],
+      [0, 0],
+      [217, 0],
+      [217, 585],
+    ],
+  },
+};
+const door4insideBaseProps = {
+  id: "door-4-inside",
+  shape: [
+    [0, 458],
+    [0, 0],
+    [172, 0],
+    [172, 538],
+  ],
+};
+const door4insidePosition = {
+  top: 287,
+  left: 1329,
+};

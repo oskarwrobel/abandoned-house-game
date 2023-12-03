@@ -31,13 +31,13 @@ export default class HallPaint extends Scene {
         droppable: true,
       },
       coords: {
-        top: 450,
-        left: 730,
+        top: 562,
+        left: 912,
         shape: [
           [0, 0],
-          [52, 0],
-          [52, 130],
-          [0, 130],
+          [65, 0],
+          [65, 150],
+          [0, 150],
         ],
       },
       events: {
@@ -51,9 +51,9 @@ export default class HallPaint extends Scene {
           sounds.play("button");
           item.shape = [
             [0, 0],
-            [21, 0],
-            [21, 52],
-            [0, 52],
+            [26, 0],
+            [26, 65],
+            [0, 65],
           ];
           equipment.addItem("hall-key", { droppable: true });
         },
@@ -67,13 +67,13 @@ export default class HallPaint extends Scene {
         classes: ["clickable", "hall-paint"],
       },
       coords: {
-        left: 420,
-        top: 80,
+        left: 525,
+        top: 100,
         shape: [
           [0, 0],
-          [440, 0],
-          [440, 570],
-          [0, 570],
+          [550, 0],
+          [550, 712],
+          [0, 712],
         ],
       },
       events: {

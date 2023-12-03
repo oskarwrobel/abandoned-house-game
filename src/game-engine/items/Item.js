@@ -88,6 +88,7 @@ export default class Item {
       polygon.setAttribute("fill", `url(#image-${this.id})`);
       patternElement.appendChild(imageElement);
       g.appendChild(patternElement);
+      this._image = imageElement;
     } else {
       polygon.setAttribute("fill", "transparent");
     }
@@ -98,7 +99,7 @@ export default class Item {
     polygon.classList.add("item");
 
     if (classes.length) {
-      polygon.classList.add(classes.join(","));
+      polygon.classList.add(...classes);
     }
 
     return g;
@@ -182,6 +183,10 @@ export default class Item {
     y *= this.game.sizeFactor;
 
     this.element.querySelector("polygon").setAttribute("transform", `rotate(${angle} ${x} ${y})`);
+  }
+
+  destroy() {
+    this.element.remove();
   }
 
   /**

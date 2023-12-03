@@ -1,13 +1,14 @@
 import Item from "../../game-engine/items/Item";
 
 export default class Door extends Item {
-  static create(game, { id, shape, target, keys = [], isLocked }) {
+  static create(game, { id, shape, target, keys = [], isLocked, attributes = {}, events = {} }) {
     const doorItem = new this(game, {
       id,
       coords: { shape },
       states: { isLocked },
       attributes: {
         classes: ["clickable"],
+        ...attributes,
       },
       events: {
         click: () => {
@@ -27,6 +28,7 @@ export default class Door extends Item {
             game.sounds.play("doorUnlock");
             game.equipment.removeItem(droppedItem);
             doorItem.states.isLocked = false;
+            events?.unlock();
 
             evt.return = true;
           } else {

@@ -36,10 +36,6 @@
   background-position: 50% 50%;
   background-size: 100% 100%;
   position: absolute;
-
-  &:hover {
-    cursor: pointer;
-  }
 }
 
 .clickable {
@@ -48,4 +44,12 @@
 
 .searchable {
   cursor: zoom-in !important;
+}
+
+.door-4-outer {
+  z-index: 1;
+}
+
+.door-4-inner {
+  z-index: 2;
 }

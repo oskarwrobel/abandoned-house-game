@@ -56,4 +56,10 @@ export default class Items {
   has(id) {
     return this._idToItem.has(id);
   }
+
+  remove(id) {
+    const item = this.get(id);
+    item.destroy();
+    return this._idToItem.delete(id);
+  }
 }
