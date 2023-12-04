@@ -2,6 +2,7 @@
 
 /* eslint-env node */
 
+import path from "path";
 import { defineConfig } from "vite";
 import { createHtmlPlugin } from "vite-plugin-html";
 import svgo from "vite-plugin-svgo";
@@ -34,6 +35,11 @@ export default defineConfig({
       ],
     }),
   ],
+  resolve: {
+    alias: {
+      "game-engine": path.resolve(__dirname, "src", "game-engine"),
+    },
+  },
   define: {
     ANALYTICS: JSON.stringify(process.env.ANALYTICS),
   },

@@ -1,4 +1,5 @@
-import Scene from "../../../game-engine/scenes/Scene";
+import Scene from "game-engine/scenes/Scene";
+
 import Flashlight from "../../items/Flashlight";
 
 export default class RoomBasementCloset extends Scene {

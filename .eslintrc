@@ -3,6 +3,7 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
+  "plugins": ["simple-import-sort"],
   "ignorePatterns": [
     "coverage",
     "dist"
@@ -12,7 +13,6 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
   ],
-  // Common JS and TS rules.
   "rules": {
     "prettier/prettier": ["error", {
       "useTabs": false,
@@ -20,10 +20,28 @@
       "printWidth": 120
     }],
 
-    // ## Possible errors
     "no-console": ["error"],
     "no-constant-condition": "off",
     "@typescript-eslint/no-use-before-define": "off",
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "simple-import-sort/imports": [
+      "warn",
+      {
+        "groups": [
+          [
+            "^@?\\w"
+          ],
+          [
+            "^(game-engine)(/.*|$)"
+          ],
+          [
+            "^\\."
+          ],
+          [
+            "^\\u0000"
+          ]
+        ]
+      }
+    ]
   }
 }

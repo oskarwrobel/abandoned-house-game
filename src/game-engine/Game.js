@@ -1,11 +1,11 @@
-import Equipment from "./Equipment";
-import Scenes from "./scenes/Scenes";
-import Items from "./items/Items";
-import Sounds from "./assets-storage/Sounds";
 import Images from "./assets-storage/Images";
+import Sounds from "./assets-storage/Sounds";
+import Equipment from "./Equipment";
+import Items from "./items/Items";
+import Scenes from "./scenes/Scenes";
 import { createElement } from "./utils/createelement";
-import mix from "./utils/mix";
 import EmitterMixin from "./utils/EmitterMixin";
+import mix from "./utils/mix";
 
 export default class Game {
   /**

@@ -1,7 +1,6 @@
 import { createSvgElement } from "../utils/createelement";
-
-import mix from "../utils/mix";
 import EmitterMixin from "../utils/EmitterMixin";
+import mix from "../utils/mix";
 
 const customEvents = new Set(["drop"]);
 

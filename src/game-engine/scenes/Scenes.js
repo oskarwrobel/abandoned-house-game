@@ -1,5 +1,5 @@
-import Scene from "./Scene";
 import { createElement } from "../utils/createelement";
+import Scene from "./Scene";
 
 export default class Scenes {
   /**

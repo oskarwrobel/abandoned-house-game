@@ -1,7 +1,7 @@
-import { createSvgElement } from "../utils/createelement";
-import mix from "../utils/mix";
-import EmitterMixin from "../utils/EmitterMixin";
 import BackButton from "../../game/items/BackButton";
+import { createSvgElement } from "../utils/createelement";
+import EmitterMixin from "../utils/EmitterMixin";
+import mix from "../utils/mix";
 
 export default class Scene {
   /**

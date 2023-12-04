@@ -1,5 +1,5 @@
-import Scene from "../../../game-engine/scenes/Scene";
-import { wait } from "../../../game-engine/utils";
+import Scene from "game-engine/scenes/Scene";
+import { wait } from "game-engine/utils";
 
 const CHARACTER_SPACE = 33;
 

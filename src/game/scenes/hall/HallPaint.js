@@ -1,4 +1,4 @@
-import Scene from "../../../game-engine/scenes/Scene";
+import Scene from "game-engine/scenes/Scene";
 
 import "./HallPaint.css";
 export default class HallPaint extends Scene {

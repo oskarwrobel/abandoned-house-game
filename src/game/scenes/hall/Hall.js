@@ -1,6 +1,7 @@
-import Scene from "../../../game-engine/scenes/Scene";
+import Scene from "game-engine/scenes/Scene";
+import { wait } from "game-engine/utils";
+
 import Door from "../../items/Door";
-import { wait } from "../../../game-engine/utils";
 
 export default class Hall extends Scene {
   /**

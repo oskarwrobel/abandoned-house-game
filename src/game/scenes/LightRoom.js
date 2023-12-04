@@ -1,4 +1,4 @@
-import Scene from "../../game-engine/scenes/Scene";
+import Scene from "game-engine/scenes/Scene";
 
 export default class LightRoom extends Scene {
   /**
