@@ -1,59 +1,51 @@
+import Game from "../Game";
+import { Coords, Events, Shape, States } from "../types";
 import { createSvgElement } from "../utils/createelement";
 import EmitterMixin from "../utils/EmitterMixin";
 import mix from "../utils/mix";
 
 const customEvents = new Set(["drop"]);
 
-export default class Item {
-  constructor(game, { id, coords = {}, attributes = {}, events = {}, states = {} }) {
-    /**
-     * @type {Game}
-     */
+type ItemAttributes = {
+  image?: string;
+  classes?: string[];
+  [key: string]: unknown;
+};
+
+export type ItemData = {
+  id: string;
+  attributes: ItemAttributes;
+  coords: Coords;
+  events: Events;
+  states: States;
+};
+
+export interface Item extends EmitterMixin;
+
+export class Item {
+  game: Game;
+  id: string;
+  states: States;
+  events: Events;
+  element: HTMLElement;
+
+  private _left: number;
+  private _top: number;
+  private _angle: [number, number, number];
+  private _shape: Shape;
+
+  constructor(game: Game, data: ItemData) {
+    const { id, coords, attributes = {}, events = {}, states = {} } = data;
+
     this.game = game;
-
-    /**
-     * @type {String}
-     */
     this.id = id;
-
-    /**
-     * @type {Object}
-     */
     this.states = states;
-
-    /**
-     * @type {Object}
-     */
     this.events = events;
-
-    /**
-     * @private
-     * @type {Number}
-     */
     this._left = 0;
-
-    /**
-     * @private
-     * @type {Number}
-     */
     this._top = 0;
-
-    /**
-     * @private
-     * @type {Array.<Number>}
-     */
     this._angle = [0, 0, 0];
-
-    /**
-     * @private
-     * @type {Array.<Array.<Number>>}
-     */
     this._shape = coords.shape;
-
-    /**
-     * @type {HTMLElement}
-     */
-    this.element = this._render(attributes);
+    this.element = this.render(attributes);
 
     this._updateCoords();
     this.game.on("update", () => this._updateCoords());
@@ -61,12 +53,7 @@ export default class Item {
     this._attachEvents(events);
   }
 
-  /**
-   * @private
-   * @param {Object} attributes
-   * @returns {HTMLElement}
-   */
-  _render({ image, classes = [] } = {}) {
+  private render({ image, classes = [] }: ItemAttributes = {}) {
     if (this.game.images.get(image)) {
       image = this.game.images.get(image);
     }
@@ -87,7 +74,6 @@ export default class Item {
       polygon.setAttribute("fill", `url(#image-${this.id})`);
       patternElement.appendChild(imageElement);
       g.appendChild(patternElement);
-      this._image = imageElement;
     } else {
       polygon.setAttribute("fill", "transparent");
     }
@@ -104,7 +90,7 @@ export default class Item {
     return g;
   }
 
-  set top(value) {
+  set top(value: number) {
     this._top = value;
     this._updateCoords();
   }
@@ -130,7 +116,7 @@ export default class Item {
     return this.top + this.height;
   }
 
-  set shape(value) {
+  set shape(value: Shape) {
     this._shape = value;
     this.element.querySelector("polygon").setAttribute("points", this._shapeToPoints());
   }
@@ -159,7 +145,7 @@ export default class Item {
     return this._angle[0];
   }
 
-  rotate(angle, x, y) {
+  rotate(angle: number, x: number, y: number) {
     if (this.angle === angle) {
       return;
     }

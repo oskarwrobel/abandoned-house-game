@@ -7,6 +7,9 @@ import { createElement } from "./utils/createelement";
 import EmitterMixin from "./utils/EmitterMixin";
 import mix from "./utils/mix";
 
+/**
+ * @implements EmitterMixin;
+ */
 export default class Game {
   /**
    * @param {Object} data
