@@ -18,5 +18,5 @@ export function start(game) {
   RoomBasementClosetClosedUnlockKeyScene.create(game);
   LightRoomScene.create(game);
 
-  game.scenes.show("room-basement");
+  game.scenes.show("hall");
 }
