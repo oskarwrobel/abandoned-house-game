@@ -12,6 +12,45 @@ export default class RoomBasement extends Scene {
       image: "sceneRoomBasement",
     });
 
+    scene.createItem({
+      id: "board3",
+      attributes: {
+        classes: ["clickable"],
+        image: "board3",
+      },
+      coords: {
+        left: 463,
+        top: 536,
+        shape: [
+          [3, 0],
+          [355, 28],
+          [353, 74],
+          [0, 46],
+        ],
+      },
+      events: {
+        click: () => {
+          scene.removeItem("board3");
+          scene.createItem({
+            id: "board3",
+            attributes: {
+              image: "board3Crashed",
+            },
+            coords: {
+              left: 463,
+              top: 536,
+              shape: [
+                [3, 0],
+                [355, 28],
+                [353, 74],
+                [0, 46],
+              ],
+            },
+          });
+        },
+      },
+    });
+
     const closet = scene.createItem({
       id: "room-basement-closet",
       attributes: {

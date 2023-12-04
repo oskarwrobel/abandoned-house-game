@@ -26,6 +26,11 @@ import digit7 from "./digit7.svg?url";
 import digit8 from "./digit8.svg?url";
 import digit9 from "./digit9.svg?url";
 
+import board1 from "./board1.svg?url";
+import board1Crashed from "./board1-crashed.svg?url";
+import board3 from "./board3.svg?url";
+import board3Crashed from "./board3-crashed.svg?url";
+
 export default {
   sceneHall,
   sceneHallWall,
@@ -54,4 +59,9 @@ export default {
   digit7,
   digit8,
   digit9,
+
+  board1,
+  board1Crashed,
+  board3,
+  board3Crashed,
 };
