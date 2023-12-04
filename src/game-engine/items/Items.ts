@@ -1,5 +1,5 @@
-import Game from "../Game";
-import Item, { ItemData } from "./Item";
+import { Game } from "../Game";
+import { Item, ItemConfig } from "./Item";
 
 export default class Items {
   game: Game;
@@ -11,7 +11,7 @@ export default class Items {
     this.itemById = new Map();
   }
 
-  create(data: ItemData) {
+  create(data: ItemConfig) {
     return this.add(new Item(this.game, data));
   }
 

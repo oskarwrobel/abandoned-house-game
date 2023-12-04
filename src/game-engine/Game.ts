@@ -3,54 +3,39 @@ import Sounds from "./assets-storage/Sounds";
 import Equipment from "./Equipment";
 import Items from "./items/Items";
 import Scenes from "./scenes/Scenes";
-import { createElement } from "./utils/createelement";
-import EmitterMixin from "./utils/EmitterMixin";
-import mix from "./utils/mix";
+import { createElement, Emitter, mix } from "./utils";
 
-/**
- * @implements EmitterMixin;
- */
-export default class Game {
-  /**
-   * @param {Object} data
-   * @param {String} data.resolution
-   */
-  constructor({ resolution, images, sounds }) {
+type Resolution = {
+  x: number;
+  y: number;
+};
+
+interface GameConfig {
+  resolution: Resolution;
+  images: Record<string, string>;
+  sounds: Record<string, string>;
+}
+
+export interface Game extends Emitter {}
+export class Game {
+  resolution: Resolution;
+  sizeFactor: number;
+  equipment: Equipment;
+  items: Items;
+  scenes: Scenes;
+  sounds: Sounds;
+  images: Images;
+  element: HTMLElement;
+
+  constructor({ resolution, images, sounds }: GameConfig) {
     this.resolution = resolution;
-
     this.sizeFactor = 1;
-
-    /**
-     * @readonly
-     * @type {Equipment}
-     */
     this.equipment = new Equipment(this);
-
-    /**
-     * @readonly
-     * @type {Items}
-     */
     this.items = new Items(this);
-
-    /**
-     * @readonly
-     * @type {Scenes}
-     */
     this.scenes = new Scenes(this);
-
-    /**
-     * @type {Sounds}
-     */
     this.sounds = new Sounds(sounds);
-
-    /**
-     * @type {Images}
-     */
     this.images = new Images(images);
 
-    /**
-     * @type {HTMLElement}
-     */
     this.element = createElement("div", { class: "game" });
     this.element.appendChild(this.scenes.element);
     this.element.appendChild(this.equipment.element);
@@ -58,10 +43,10 @@ export default class Game {
   }
 
   update() {
-    const [desiredWidth, desiredHeight] = this.resolution.split("x");
+    const { x, y } = this.resolution;
     const maxWidth = window.innerWidth;
     const maxHeight = window.innerHeight;
-    const ratio = desiredWidth / desiredHeight;
+    const ratio = x / y;
 
     let optimalWidth = maxWidth;
     let optimalHeight = maxWidth / ratio;
@@ -71,7 +56,7 @@ export default class Game {
       optimalHeight = maxHeight;
     }
 
-    this.sizeFactor = optimalWidth / desiredWidth;
+    this.sizeFactor = optimalWidth / x;
 
     this.element.style.width = optimalWidth + "px";
     this.element.style.height = optimalHeight + "px";
@@ -80,4 +65,4 @@ export default class Game {
   }
 }
 
-mix(Game, EmitterMixin);
+mix(Game, Emitter);

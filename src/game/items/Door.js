@@ -1,4 +1,4 @@
-import Item from "game-engine/items/Item";
+import { Item } from "game-engine/items/Item";
 
 export default class Door extends Item {
   static create(game, { id, shape, target, keys = [], isLocked, attributes = {}, events = {} }) {

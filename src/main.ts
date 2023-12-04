@@ -1,4 +1,4 @@
-import Game from "game-engine/Game";
+import { Game } from "game-engine/Game";
 
 import assetsImages from "./game/assets/images";
 import assetsSounds from "./game/assets/sounds";
@@ -9,7 +9,7 @@ import "./main.css";
 import "./game/game.css";
 
 const game = new Game({
-  resolution: "1600x900",
+  resolution: { x: 1600, y: 900 },
   images: assetsImages,
   sounds: assetsSounds,
 });

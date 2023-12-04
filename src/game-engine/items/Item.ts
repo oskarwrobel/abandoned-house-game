@@ -1,8 +1,5 @@
-import Game from "../Game";
-import { Coords, Events, Shape, States } from "../types";
-import { createSvgElement } from "../utils/createelement";
-import EmitterMixin from "../utils/EmitterMixin";
-import mix from "../utils/mix";
+import { Game } from "../Game";
+import { createSvgElement, Emitter, mix } from "../utils";
 
 const customEvents = new Set(["drop"]);
 
@@ -12,29 +9,45 @@ type ItemAttributes = {
   [key: string]: unknown;
 };
 
-export type ItemData = {
-  id: string;
-  attributes: ItemAttributes;
-  coords: Coords;
-  events: Events;
-  states: States;
+type ItemEvents = {
+  [key: string]: (...args: unknown[]) => void;
 };
 
-export interface Item extends EmitterMixin;
+type ItemStates = {
+  [key: string]: unknown;
+};
+
+export type ItemShape = [number, number][];
+
+export type ItemCoords = {
+  left: number;
+  top: number;
+  shape: ItemShape;
+};
+
+export type ItemConfig = {
+  id: string;
+  attributes: ItemAttributes;
+  coords: ItemCoords;
+  events: ItemEvents;
+  states: ItemStates;
+};
+
+export interface Item extends Emitter {}
 
 export class Item {
   game: Game;
   id: string;
-  states: States;
-  events: Events;
-  element: HTMLElement;
+  states: ItemStates;
+  events: ItemEvents;
+  element: SVGElement;
 
   private _left: number;
   private _top: number;
   private _angle: [number, number, number];
-  private _shape: Shape;
+  private _shape: ItemShape;
 
-  constructor(game: Game, data: ItemData) {
+  constructor(game: Game, data: ItemConfig) {
     const { id, coords, attributes = {}, events = {}, states = {} } = data;
 
     this.game = game;
@@ -47,52 +60,15 @@ export class Item {
     this._shape = coords.shape;
     this.element = this.render(attributes);
 
-    this._updateCoords();
-    this.game.on("update", () => this._updateCoords());
+    this.updateCoords();
+    this.game.on("update", () => this.updateCoords());
 
     this._attachEvents(events);
   }
 
-  private render({ image, classes = [] }: ItemAttributes = {}) {
-    if (this.game.images.get(image)) {
-      image = this.game.images.get(image);
-    }
-
-    const g = createSvgElement("g");
-    const polygon = createSvgElement("polygon", { points: this._shapeToPoints() });
-
-    if (image) {
-      const patternElement = createSvgElement("pattern", {
-        id: "image-" + this.id,
-        patternUnits: "userSpaceOnUse",
-      });
-
-      const imageElement = createSvgElement("image", {
-        href: image,
-      });
-
-      polygon.setAttribute("fill", `url(#image-${this.id})`);
-      patternElement.appendChild(imageElement);
-      g.appendChild(patternElement);
-    } else {
-      polygon.setAttribute("fill", "transparent");
-    }
-
-    g.appendChild(polygon);
-
-    polygon.id = this.id;
-    polygon.classList.add("item");
-
-    if (classes.length) {
-      polygon.classList.add(...classes);
-    }
-
-    return g;
-  }
-
   set top(value: number) {
     this._top = value;
-    this._updateCoords();
+    this.updateCoords();
   }
 
   get top() {
@@ -101,7 +77,7 @@ export class Item {
 
   set left(value) {
     this._left = value;
-    this._updateCoords();
+    this.updateCoords();
   }
 
   get left() {
@@ -112,13 +88,9 @@ export class Item {
     return this.left + this.width;
   }
 
-  get bottom() {
-    return this.top + this.height;
-  }
-
-  set shape(value: Shape) {
+  set shape(value: ItemShape) {
     this._shape = value;
-    this.element.querySelector("polygon").setAttribute("points", this._shapeToPoints());
+    this.element.querySelector("polygon").setAttribute("points", this.shapeToPoints());
   }
 
   get width() {
@@ -174,11 +146,44 @@ export class Item {
     this.element.remove();
   }
 
-  /**
-   * @private
-   * @param {Object} events
-   */
-  _attachEvents(events = {}) {
+  private render({ image, classes = [] }: ItemAttributes = {}) {
+    if (this.game.images.get(image)) {
+      image = this.game.images.get(image);
+    }
+
+    const g = createSvgElement("g");
+    const polygon = createSvgElement("polygon", { points: this.shapeToPoints() });
+
+    if (image) {
+      const patternElement = createSvgElement("pattern", {
+        id: "image-" + this.id,
+        patternUnits: "userSpaceOnUse",
+      });
+
+      const imageElement = createSvgElement("image", {
+        href: image,
+      });
+
+      polygon.setAttribute("fill", `url(#image-${this.id})`);
+      patternElement.appendChild(imageElement);
+      g.appendChild(patternElement);
+    } else {
+      polygon.setAttribute("fill", "transparent");
+    }
+
+    g.appendChild(polygon);
+
+    polygon.id = this.id;
+    polygon.classList.add("item");
+
+    if (classes.length) {
+      polygon.classList.add(...classes);
+    }
+
+    return g;
+  }
+
+  private _attachEvents(events: ItemEvents) {
     for (const name of Object.keys(events)) {
       if (customEvents.has(name)) {
         this.on(name, events[name]);
@@ -188,7 +193,7 @@ export class Item {
     }
   }
 
-  _shapeToPoints() {
+  private shapeToPoints() {
     const sizeFactor = this.game.sizeFactor;
 
     return this._shape
@@ -201,11 +206,11 @@ export class Item {
       .join(" ");
   }
 
-  _updateCoords() {
+  private updateCoords() {
     const polygon = this.element.querySelector("polygon");
     const pattern = this.element.querySelector("pattern");
 
-    polygon.setAttribute("points", this._shapeToPoints());
+    polygon.setAttribute("points", this.shapeToPoints());
 
     if (pattern) {
       const ratio = this.game.sizeFactor;
@@ -214,12 +219,15 @@ export class Item {
       const width = this.width * ratio;
       const height = this.height * ratio;
 
-      pattern.setAttribute("x", left);
-      pattern.setAttribute("y", top);
-      pattern.setAttribute("width", width);
-      pattern.setAttribute("height", height);
-      pattern.childNodes[0].setAttribute("width", width);
-      pattern.childNodes[0].setAttribute("height", height);
+      const image = pattern.querySelector("image");
+
+      pattern.setAttribute("x", String(left));
+      pattern.setAttribute("y", String(top));
+      pattern.setAttribute("width", String(width));
+      pattern.setAttribute("height", String(height));
+
+      image.setAttribute("width", String(width));
+      image.setAttribute("height", String(height));
     }
 
     const angle = [...this._angle];
@@ -230,4 +238,4 @@ export class Item {
   }
 }
 
-mix(Item, EmitterMixin);
+mix(Item, Emitter);

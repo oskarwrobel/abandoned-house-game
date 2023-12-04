@@ -1,4 +1,4 @@
-import Item from "game-engine/items/Item";
+import { Item } from "game-engine/items/Item";
 import { createElement } from "game-engine/utils/createelement";
 
 import "./Flashlight.css";
