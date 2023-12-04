@@ -1,7 +1,7 @@
 type Name = string;
 type Path = string;
 
-export default class Images {
+export class Images {
   private nameToPath: Map<Name, Path> = new Map();
 
   constructor(imagesConfig: Record<Name, Path>) {

@@ -1,4 +1,4 @@
-import Scene from "game-engine/scenes/Scene";
+import { Scene } from "game-engine/scenes";
 
 import Flashlight from "../../items/Flashlight";
 

@@ -1,7 +1,9 @@
 import { Game } from "../Game";
 import { Item, ItemConfig } from "./Item";
 
-export default class Items {
+export type IdOrItem = string | Item;
+
+export class Items {
   game: Game;
 
   private itemById: Map<string, Item>;
@@ -37,9 +39,9 @@ export default class Items {
     return this.itemById.get(id);
   }
 
-  remove(id: string) {
-    const item = this.get(id);
+  remove(idOrItem: IdOrItem) {
+    const item = typeof idOrItem === "string" ? this.game.items.get(idOrItem) : idOrItem;
     item.destroy();
-    this.itemById.delete(id);
+    this.itemById.delete(item.id);
   }
 }

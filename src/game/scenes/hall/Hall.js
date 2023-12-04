@@ -1,4 +1,4 @@
-import Scene from "game-engine/scenes/Scene";
+import { Scene } from "game-engine/scenes";
 import { wait } from "game-engine/utils";
 
 import Door from "../../items/Door";

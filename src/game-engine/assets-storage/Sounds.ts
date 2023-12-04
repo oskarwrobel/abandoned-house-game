@@ -10,7 +10,7 @@ const audioContext = new AudioContextConstructor();
 type Name = string;
 type Path = string;
 
-export default class Sounds {
+export class Sounds {
   private nameToPath: Map<Name, Path> = new Map();
   private sounds: Map<Name, AudioBuffer> = new Map();
 

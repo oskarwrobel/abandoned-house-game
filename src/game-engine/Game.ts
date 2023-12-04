@@ -1,8 +1,7 @@
-import Images from "./assets-storage/Images";
-import Sounds from "./assets-storage/Sounds";
-import Equipment from "./Equipment";
-import Items from "./items/Items";
-import Scenes from "./scenes/Scenes";
+import { Images, Sounds } from "./assets-storage";
+import { Equipment } from "./Equipment";
+import { Items } from "./items";
+import { Scenes } from "./scenes";
 import { createElement, Emitter, mix } from "./utils";
 
 type Resolution = {
