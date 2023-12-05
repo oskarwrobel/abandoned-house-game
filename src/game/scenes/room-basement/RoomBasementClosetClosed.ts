@@ -1,11 +1,8 @@
+import { Game } from "game-engine/Game";
 import { Scene } from "game-engine/scenes";
 
 export default class RoomBasementClosetClosed extends Scene {
-  /**
-   * @param {Game} game
-   * @returns {Scene}
-   */
-  static create(game) {
+  static create(game: Game) {
     const scene = new this(game, {
       id: "room-basement-closet-closed",
       image: "sceneRoomBasementClosetClosed",
@@ -16,16 +13,16 @@ export default class RoomBasementClosetClosed extends Scene {
       attributes: {
         classes: ["clickable"],
       },
-      coords: {
+      position: {
         top: 484,
         left: 817,
-        shape: [
-          [0, 0],
-          [96, 0],
-          [96, 105],
-          [0, 105],
-        ],
       },
+      shape: [
+        [0, 0],
+        [96, 0],
+        [96, 105],
+        [0, 105],
+      ],
       events: {
         click: async () => {
           game.sounds.play("button");

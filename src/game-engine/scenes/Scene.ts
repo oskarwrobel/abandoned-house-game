@@ -1,7 +1,7 @@
 import { Game } from "game-engine/Game";
 import { IdOrItem, ItemConfig } from "game-engine/items";
 
-import BackButton from "../../game/items/BackButton";
+import { BackButton } from "../../game/items/BackButton";
 import { createSvgElement, Emitter, mix } from "../utils";
 
 export type SceneConfig = {
@@ -23,15 +23,15 @@ export class Scene {
 
   createItem(itemConfig: ItemConfig) {
     const item = this.game.items.create(itemConfig);
-    this.addItem(item, itemConfig.coords);
+    this.addItem(item, itemConfig.position);
     return item;
   }
 
-  addItem(idOrItem: IdOrItem, coords: { left: number; top: number }) {
+  addItem(idOrItem: IdOrItem, position: { left: number; top: number }) {
     const item = typeof idOrItem === "string" ? this.game.items.get(idOrItem) : idOrItem;
 
     item.element.remove();
-    Object.assign(item, coords);
+    Object.assign(item, position);
     this.element.appendChild(item.element);
   }
 
@@ -39,12 +39,13 @@ export class Scene {
     this.game.items.remove(idOrItem);
   }
 
+  // TODO: Engine function should not know anything about game items
   addBackButton(backScene: string) {
     this.addItem(
       BackButton.create(this.game, {
         id: `${this.id}-back`,
         scene: this,
-        backScene: this.game.scenes.get(backScene),
+        backScene,
       }),
       BackButton.defaultPosition,
     );

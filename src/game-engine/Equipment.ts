@@ -21,7 +21,7 @@ export class Equipment {
   }
 
   addItem(idOrItem: IdOrItem, config?: ItemConfig) {
-    const { droppable } = config;
+    const { droppable } = config ?? {};
     const item = typeof idOrItem === "string" ? this.game.items.get(idOrItem) : idOrItem;
 
     item.top = paddingV;

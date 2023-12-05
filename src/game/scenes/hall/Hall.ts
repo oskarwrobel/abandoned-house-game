@@ -1,14 +1,11 @@
+import { Game } from "game-engine/Game";
 import { Scene } from "game-engine/scenes";
 import { wait } from "game-engine/utils";
 
-import Door from "../../items/Door";
+import { Door, DoorConfig } from "../../items/Door";
 
 export default class Hall extends Scene {
-  /**
-   * @param {Game} game
-   * @returns {Scene}
-   */
-  static create(game) {
+  static create(game: Game) {
     const { scenes, equipment, sounds } = game;
 
     const scene = new this(game, {
@@ -22,16 +19,16 @@ export default class Hall extends Scene {
         image: "hallPaint",
         classes: ["clickable"],
       },
-      coords: {
+      position: {
         top: 225,
         left: 723,
-        shape: [
-          [0, 0],
-          [153, 0],
-          [153, 200],
-          [0, 200],
-        ],
       },
+      shape: [
+        [0, 0],
+        [153, 0],
+        [153, 200],
+        [0, 200],
+      ],
       events: {
         click: () => {
           if (equipment.isGrabbing) {
@@ -49,16 +46,16 @@ export default class Hall extends Scene {
       attributes: {
         image: "hallLeftDoor",
       },
-      coords: {
+      position: {
         top: 278,
         left: 103,
-        shape: [
-          [0, 585],
-          [0, 0],
-          [217, 0],
-          [217, 475],
-        ],
       },
+      shape: [
+        [0, 585],
+        [0, 0],
+        [217, 0],
+        [217, 475],
+      ],
     });
     scene.addItem(
       Door.create(game, {
@@ -82,16 +79,16 @@ export default class Hall extends Scene {
       attributes: {
         image: "hallLeftDoorOpen",
       },
-      coords: {
+      position: {
         top: 279,
         left: 425,
-        shape: [
-          [0, 432],
-          [0, 0],
-          [160, 0],
-          [160, 350],
-        ],
       },
+      shape: [
+        [0, 432],
+        [0, 0],
+        [160, 0],
+        [160, 350],
+      ],
     });
     scene.addItem(
       Door.create(game, {
@@ -115,16 +112,16 @@ export default class Hall extends Scene {
       attributes: {
         image: "hallRightDoor",
       },
-      coords: {
+      position: {
         top: 279,
         left: 1023,
-        shape: [
-          [0, 350],
-          [0, 0],
-          [160, 0],
-          [160, 432],
-        ],
       },
+      shape: [
+        [0, 350],
+        [0, 0],
+        [160, 0],
+        [160, 432],
+      ],
     });
     scene.addItem(
       Door.create(game, {
@@ -179,20 +176,20 @@ export default class Hall extends Scene {
   }
 }
 
-const door4baseProps = {
+const door4baseProps: DoorConfig = {
   id: "door-4",
-  coords: {
+  position: {
     top: 277,
     left: 1284,
-    shape: [
-      [0, 475],
-      [0, 0],
-      [217, 0],
-      [217, 585],
-    ],
   },
+  shape: [
+    [0, 475],
+    [0, 0],
+    [217, 0],
+    [217, 585],
+  ],
 };
-const door4insideBaseProps = {
+const door4insideBaseProps: DoorConfig = {
   id: "door-4-inside",
   shape: [
     [0, 458],

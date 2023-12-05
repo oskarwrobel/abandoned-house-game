@@ -58,7 +58,7 @@ export class Emitter {
   }
 }
 
-class EventInfo {
+export class EventInfo {
   off: () => void;
   return: unknown;
 

@@ -1,7 +1,7 @@
 import { Game } from "../Game";
 import { createSvgElement, Emitter, mix } from "../utils";
 
-const customEvents = new Set(["drop"]);
+const customEvents = new Set(["drop", "unlock"]);
 
 type ItemAttributes = {
   image?: string;
@@ -19,51 +19,51 @@ type ItemStates = {
 
 export type ItemShape = [number, number][];
 
-export type ItemCoords = {
+export type ItemPosition = {
   left: number;
   top: number;
-  shape: ItemShape;
 };
 
 export type ItemConfig = {
   id: string;
-  attributes: ItemAttributes;
-  coords: ItemCoords;
-  events: ItemEvents;
-  states: ItemStates;
+  shape: ItemShape;
+  position?: ItemPosition;
+  attributes?: ItemAttributes;
+  events?: ItemEvents;
+  states?: ItemStates;
 };
 
 export interface Item extends Emitter {}
 
 export class Item {
-  game: Game;
-  id: string;
+  readonly game: Game;
+  readonly id: string;
   states: ItemStates;
   events: ItemEvents;
-  element: SVGElement;
-
+  readonly element: SVGElement;
+  private _shape: ItemShape;
   private _left: number;
   private _top: number;
   private _angle: [number, number, number];
-  private _shape: ItemShape;
+  readonly image: string;
 
   constructor(game: Game, data: ItemConfig) {
-    const { id, coords, attributes = {}, events = {}, states = {} } = data;
+    const { id, position, shape, attributes = {}, events = {}, states = {} } = data;
 
     this.game = game;
     this.id = id;
     this.states = states;
     this.events = events;
-    this._left = 0;
-    this._top = 0;
+    this._left = position?.left ?? 0;
+    this._top = position?.top ?? 0;
+    this._shape = shape;
     this._angle = [0, 0, 0];
-    this._shape = coords.shape;
     this.element = this.render(attributes);
 
     this.updateCoords();
     this.game.on("update", () => this.updateCoords());
 
-    this._attachEvents(events);
+    this.attachEvents(events);
   }
 
   set top(value: number) {
@@ -183,7 +183,7 @@ export class Item {
     return g;
   }
 
-  private _attachEvents(events: ItemEvents) {
+  private attachEvents(events: ItemEvents) {
     for (const name of Object.keys(events)) {
       if (customEvents.has(name)) {
         this.on(name, events[name]);
