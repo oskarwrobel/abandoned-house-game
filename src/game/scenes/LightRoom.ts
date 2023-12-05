@@ -1,11 +1,8 @@
-import Scene from "game-engine/scenes/Scene";
+import { Game } from "game-engine/Game";
+import { Scene } from "game-engine/scenes";
 
 export default class LightRoom extends Scene {
-  /**
-   * @param {Game} game
-   * @returns {Scene}
-   */
-  static create(game) {
+  static create(game: Game) {
     const scene = new this(game, {
       id: "room-light",
       image: "sceneRoomLight",

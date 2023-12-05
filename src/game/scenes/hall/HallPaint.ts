@@ -1,12 +1,9 @@
-import Scene from "game-engine/scenes/Scene";
+import { Game } from "game-engine/Game";
+import { Scene } from "game-engine/scenes";
 
 import "./HallPaint.css";
 export default class HallPaint extends Scene {
-  /**
-   * @param {Game} game
-   * @returns {Scene}
-   */
-  static create(game) {
+  static create(game: Game) {
     const { equipment, sounds, items } = game;
 
     const scene = new this(game, {
@@ -23,16 +20,16 @@ export default class HallPaint extends Scene {
         classes: ["clickable"],
         droppable: true,
       },
-      coords: {
+      position: {
         top: 562,
         left: 912,
-        shape: [
-          [0, 0],
-          [65, 0],
-          [65, 150],
-          [0, 150],
-        ],
       },
+      shape: [
+        [0, 0],
+        [65, 0],
+        [65, 150],
+        [0, 150],
+      ],
       events: {
         click: () => {
           if (equipment.isGrabbing || equipment.hasItem("hall-key")) {
@@ -59,16 +56,16 @@ export default class HallPaint extends Scene {
         image: "hallPaint",
         classes: ["clickable", "hall-paint"],
       },
-      coords: {
+      position: {
         left: 525,
         top: 100,
-        shape: [
-          [0, 0],
-          [550, 0],
-          [550, 712],
-          [0, 712],
-        ],
       },
+      shape: [
+        [0, 0],
+        [550, 0],
+        [550, 712],
+        [0, 712],
+      ],
       events: {
         click: () => {
           if (equipment.isGrabbing) {

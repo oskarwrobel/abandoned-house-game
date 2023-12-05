@@ -1,6 +1,6 @@
 import "./loader.css";
 
-let loadingTimerId;
+let loadingTimerId: ReturnType<typeof setTimeout>;
 
 export function showLoader() {
   loadingTimerId = setTimeout(() => {

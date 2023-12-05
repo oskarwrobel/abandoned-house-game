@@ -3,7 +3,6 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["simple-import-sort"],
   "ignorePatterns": [
     "coverage",
     "dist"
@@ -13,6 +12,7 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
   ],
+  "plugins": ["simple-import-sort"],
   "rules": {
     "prettier/prettier": ["error", {
       "useTabs": false,
@@ -23,6 +23,7 @@
     "no-console": ["error"],
     "no-constant-condition": "off",
     "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-unsafe-declaration-merging" :"off",
     "@typescript-eslint/no-explicit-any": "off",
     "simple-import-sort/imports": [
       "warn",

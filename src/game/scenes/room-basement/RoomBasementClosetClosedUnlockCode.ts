@@ -1,28 +1,28 @@
-import Scene from "game-engine/scenes/Scene";
+import { Game } from "game-engine/Game";
+import { Item } from "game-engine/items";
+import { Scene } from "game-engine/scenes";
 import { wait } from "game-engine/utils";
 
 const CHARACTER_SPACE = 33;
 
 export default class RoomBasementClosetClosedUnlockKey extends Scene {
   currentValue = "";
-  digits = [];
+  checking = false;
+  digits: Item[] = [];
 
-  createKeyItem({ value, top, left }) {
+  createKeyItem({ value, top, left }: { value: number; top: number; left: number }) {
     return this.createItem({
       id: `room-basement-closet-unlock-key-${value}`,
       attributes: {
         classes: ["clickable"],
       },
-      coords: {
-        top,
-        left,
-        shape: [
-          [0, 0],
-          [90, 0],
-          [90, 58],
-          [0, 58],
-        ],
-      },
+      position: { left, top },
+      shape: [
+        [0, 0],
+        [90, 0],
+        [90, 58],
+        [0, 58],
+      ],
       events: {
         click: async () => {
           if (this.checking) {
@@ -84,25 +84,21 @@ export default class RoomBasementClosetClosedUnlockKey extends Scene {
       return this.createItem({
         id: `code-key-${index}`,
         attributes: { image: `digit${character}` },
-        coords: {
+        position: {
           left: startLeft + index * CHARACTER_SPACE,
           top: 166,
-          shape: [
-            [0, 0],
-            [41, 0],
-            [41, 55],
-            [0, 50],
-          ],
         },
+        shape: [
+          [0, 0],
+          [41, 0],
+          [41, 55],
+          [0, 50],
+        ],
       });
     });
   }
 
-  /**
-   * @param {Game} game
-   * @returns {Scene}
-   */
-  static create(game) {
+  static create(game: Game) {
     const scene = new this(game, {
       id: "room-basement-closet-closed-unlock-key",
       image: "sceneRoomBasementClosetClosedUnlockCode",
